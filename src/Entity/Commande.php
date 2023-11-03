@@ -46,18 +46,19 @@ class Commande
     #[ORM\Column(length: 255)]
     private ?string $etat = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Casier $leCasier = null;
-
     #[ORM\OneToMany(mappedBy: 'laCommande', targetEntity: Colis::class)]
     private Collection $lesColis;
 
     #[ORM\ManyToOne(inversedBy: 'lesCommandes')]
     private ?CompteUtilisateur $leCompteUtilisateur = null;
 
+    #[ORM\ManyToMany(targetEntity: Casier::class, inversedBy: 'lesCommandes')]
+    private Collection $lesCasiers;
+
     public function __construct()
     {
         $this->lesColis = new ArrayCollection();
+        $this->lesCasiers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -185,18 +186,6 @@ class Commande
         return $this;
     }
 
-    public function getLeCasier(): ?Casier
-    {
-        return $this->leCasier;
-    }
-
-    public function setLeCasier(?Casier $leCasier): static
-    {
-        $this->leCasier = $leCasier;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Colis>
      */
@@ -235,6 +224,30 @@ class Commande
     public function setLeCompteUtilisateur(?CompteUtilisateur $leCompteUtilisateur): static
     {
         $this->leCompteUtilisateur = $leCompteUtilisateur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Casier>
+     */
+    public function getLesCasiers(): Collection
+    {
+        return $this->lesCasiers;
+    }
+
+    public function addLesCasier(Casier $lesCasier): static
+    {
+        if (!$this->lesCasiers->contains($lesCasier)) {
+            $this->lesCasiers->add($lesCasier);
+        }
+
+        return $this;
+    }
+
+    public function removeLesCasier(Casier $lesCasier): static
+    {
+        $this->lesCasiers->removeElement($lesCasier);
 
         return $this;
     }

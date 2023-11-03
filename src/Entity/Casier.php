@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CasierRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,14 @@ class Casier
 
     #[ORM\ManyToOne(inversedBy: 'lesCasiers')]
     private ?CentreRelaisColis $leCentreRelaisColis = null;
+
+    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'lesCasiers')]
+    private Collection $lesCommandes;
+
+    public function __construct()
+    {
+        $this->lesCommandes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +85,33 @@ class Casier
     public function setLeCentreRelaisColis(?CentreRelaisColis $leCentreRelaisColis): static
     {
         $this->leCentreRelaisColis = $leCentreRelaisColis;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getLesCommandes(): Collection
+    {
+        return $this->lesCommandes;
+    }
+
+    public function addLesCommande(Commande $lesCommande): static
+    {
+        if (!$this->lesCommandes->contains($lesCommande)) {
+            $this->lesCommandes->add($lesCommande);
+            $lesCommande->addLesCasier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesCommande(Commande $lesCommande): static
+    {
+        if ($this->lesCommandes->removeElement($lesCommande)) {
+            $lesCommande->removeLesCasier($this);
+        }
 
         return $this;
     }

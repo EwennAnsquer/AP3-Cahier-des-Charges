@@ -49,11 +49,11 @@ class Commande
     #[ORM\OneToMany(mappedBy: 'laCommande', targetEntity: Colis::class)]
     private Collection $lesColis;
 
-    #[ORM\ManyToOne(inversedBy: 'lesCommandes')]
-    private ?CompteUtilisateur $leCompteUtilisateur = null;
-
     #[ORM\ManyToMany(targetEntity: Casier::class, inversedBy: 'lesCommandes')]
     private Collection $lesCasiers;
+
+    #[ORM\ManyToOne(inversedBy: 'lesCommandes')]
+    private ?CompteUtilisateur $leCompteUtilisateur = null;
 
     public function __construct()
     {
@@ -216,18 +216,6 @@ class Commande
         return $this;
     }
 
-    public function getLeCompteUtilisateur(): ?CompteUtilisateur
-    {
-        return $this->leCompteUtilisateur;
-    }
-
-    public function setLeCompteUtilisateur(?CompteUtilisateur $leCompteUtilisateur): static
-    {
-        $this->leCompteUtilisateur = $leCompteUtilisateur;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Casier>
      */
@@ -248,6 +236,18 @@ class Commande
     public function removeLesCasier(Casier $lesCasier): static
     {
         $this->lesCasiers->removeElement($lesCasier);
+
+        return $this;
+    }
+
+    public function getLeCompteUtilisateur(): ?CompteUtilisateur
+    {
+        return $this->leCompteUtilisateur;
+    }
+
+    public function setLeCompteUtilisateur(?CompteUtilisateur $leCompteUtilisateur): static
+    {
+        $this->leCompteUtilisateur = $leCompteUtilisateur;
 
         return $this;
     }

@@ -3,13 +3,20 @@
     .firstRow{
         height: 20vh;
         background-color: #000000;
+        i{
+            color: white;
+        }
+        i::before{
+            font-size: 7vh !important;
+        }
         .profile{
             background-color: #fff;
             height: 45%;
             aspect-ratio: 1/1;
+            font-size: 5vh;
         }
         .notificationBell{
-            width: 30px;
+            width: 5vh;
             aspect-ratio: 1/1;
         }
     }
@@ -19,6 +26,7 @@
             background-color: #000000;
             a{
                 color: white;
+                font-size: 3vh !important;
             }
             .logoutButton{
                 color: red;

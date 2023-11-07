@@ -1,20 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello RapportsController!{% endblock %}
+{% block title %}Rapports{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('navbar') }}
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="container-fluid p-0 m-0 w-100">
+        <div class="row firstRow w-100">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/xampp/htdocs/BTS-2023-2024/AP3-Cahier-des-Charges/src/Controller/RapportsController.php'|file_link(0) }}">src/Controller/RapportsController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/xampp/htdocs/BTS-2023-2024/AP3-Cahier-des-Charges/templates/rapports/index.html.twig'|file_link(0) }}">templates/rapports/index.html.twig</a></code></li>
-    </ul>
-</div>
+        </div>
+        <div class="row secondRow w-100">
+            <div class="col-lg-2 leftNavBar d-flex flex-column align-items-center text-center p-4 gap-4">
+                <u><a href="#" class="text-decoration-none">Rapports</a></u>
+                <a href="#" class="text-decoration-none">Commandes</a>
+                <a href="#" class="text-decoration-none">Centre de Relais Colis</a>
+                <a href="#" class="text-decoration-none">Clients</u></a>
+                <a href="#" class="text-decoration-none">Paramètres</u></a>
+            </div>
+            <div class="col-lg-10">
+                <!-- Content for the right column -->
+            </div>
+        </div>
+    </div>
 {% endblock %}

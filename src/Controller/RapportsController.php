@@ -21,4 +21,10 @@ class RapportsController extends AbstractController
             'user' => $user,
         ]);
     }
+
+    #[Route('/', name: 'app_redirect')]
+    public function redirectToRapports(): Response
+    {
+         return $this->redirectToRoute('app_rapports');
+    }
 }

@@ -11,8 +11,13 @@ class CommandeController extends AbstractController
     #[Route('/commande', name: 'app_commande')]
     public function index(): Response
     {
+        if ($this->getUser()==false) {
+            return $this->redirectToRoute('app_login');
+        }else{
+            $user = $this->getUser();
+        }
         return $this->render('commande/index.html.twig', [
-            'controller_name' => 'CommandeController',
+            'user' => $user,
         ]);
     }
 }

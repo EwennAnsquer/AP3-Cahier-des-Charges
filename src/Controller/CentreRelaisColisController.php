@@ -8,11 +8,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CentreRelaisColisController extends AbstractController
 {
-    #[Route('/centre/relais/colis', name: 'app_centre_relais_colis')]
+    #[Route('/CentreRelaisColis', name: 'app_centre_relais_colis')]
     public function index(): Response
     {
+        if ($this->getUser()==false) {
+            return $this->redirectToRoute('app_login');
+        }else{
+            $user = $this->getUser();
+        }
         return $this->render('centre_relais_colis/index.html.twig', [
-            'controller_name' => 'CentreRelaisColisController',
+            'user' => $user,
         ]);
     }
 }

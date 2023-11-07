@@ -1,0 +1,28 @@
+.container-fluid{
+    height: 100vh;
+    .firstRow{
+        height: 20vh;
+        background-color: #000000;
+        .profile{
+            background-color: #fff;
+            height: 45%;
+            aspect-ratio: 1/1;
+        }
+        .notificationBell{
+            width: 30px;
+            aspect-ratio: 1/1;
+        }
+    }
+    .secondRow{
+        height: 80vh;
+        .leftNavBar{
+            background-color: #000000;
+            a{
+                color: white;
+            }
+            .logoutButton{
+                color: red;
+            }
+        }
+    }
+}

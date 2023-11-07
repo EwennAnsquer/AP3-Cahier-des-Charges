@@ -13,10 +13,12 @@ class RapportsController extends AbstractController
     {
         if ($this->getUser()==false) {
             return $this->redirectToRoute('app_login');
+        }else{
+            $user = $this->getUser();
         }
 
         return $this->render('rapports/index.html.twig', [
-            'controller_name' => 'RapportsController',
+            'user' => $user,
         ]);
     }
 }

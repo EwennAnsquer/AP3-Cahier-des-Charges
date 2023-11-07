@@ -4,12 +4,12 @@
 
 {% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
-    {{ encore_entry_link_tags('login') }}
+    {{ encore_entry_link_tags('login-register') }}
 {% endblock %}
 
 {% block body %}
     {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        <div class="alert alert-danger position-absolute w-100">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     {% if app.user %}
@@ -36,7 +36,7 @@
                 <div class="row">
                     <div class="col-6">
                         <!-- Submit button -->
-                        <button type="submit" class="btn btn-primary btn-block mb-4">S'enregistrer</button>
+                        <button type="submit" class="btn btn-primary btn-block mb-4">S'identifier</button>
                     </div>
                     <div class="col-6">
                         <!-- Register buttons -->

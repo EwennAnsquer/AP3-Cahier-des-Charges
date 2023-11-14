@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Centre Relais Colis t{% endblock %}
+{% block title %}Centre Relais Colis{% endblock %}
 
 {% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
@@ -43,6 +43,8 @@
                                 <th scope="col">ville</th>
                                 <th scope="col">code postal</th>
                                 <th scope="col">pays</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,6 +56,12 @@
                                     <td>{{unCentre.ville}}</td>
                                     <td>{{unCentre.codePostal}}</td>
                                     <td>{{unCentre.pays}}</td>
+                                    <td>
+                                        <a href="{{path('app_centre_relais_colis_modify', {'id': unCentre.id})}}" type="button" class="btn btn-warning">Éditer</a>
+                                    </td>
+                                    <td>
+                                        <a href="{{path('app_centre_relais_colis_delete', {'id': unCentre.id})}}" type="button" class="btn btn-danger">Supprimer</a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

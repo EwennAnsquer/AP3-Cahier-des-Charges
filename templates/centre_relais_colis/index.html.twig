@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Centre Relais Colis{% endblock %}
+{% block title %}Centre Relais Colis t{% endblock %}
 
 {% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
     {{ encore_entry_link_tags('navbar') }}
+    {{ encore_entry_link_tags('centreRelaisColis') }}
 {% endblock %}
 
 {% block body %}
@@ -30,6 +31,36 @@
                 <a href="{{ path('app_client') }}" class="text-decoration-none">Clients</u></a>
                 <a href="{{ path('app_parametre') }}" class="text-decoration-none">Paramètres</a>
                 <a href="{{ path('app_logout') }}" class="text-decoration-none logoutButton mt-auto">Déconnexion</u></a>
+            </div>
+            <div class="main col-10">
+                {% if centreRelaisColis is not empty%}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">nom</th>
+                                <th scope="col">adresse</th>
+                                <th scope="col">ville</th>
+                                <th scope="col">code postal</th>
+                                <th scope="col">pays</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for unCentre in centreRelaisColis %}
+                                <tr>
+                                    <th scope="row">{{unCentre.id}}</th>
+                                    <td>{{unCentre.nom}}</td>
+                                    <td>{{unCentre.adresse}}</td>
+                                    <td>{{unCentre.ville}}</td>
+                                    <td>{{unCentre.codePostal}}</td>
+                                    <td>{{unCentre.pays}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="position-relative text-center top-50 start-50 translate-middle">Il n'y a aucun centre de relais colis.</p>
+                {% endif %}
             </div>
         </div>
     </div>

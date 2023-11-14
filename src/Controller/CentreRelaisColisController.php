@@ -26,4 +26,35 @@ class CentreRelaisColisController extends AbstractController
             'centreRelaisColis' => $allCentreRelaisColis,
         ]);
     }
+
+    #[Route('/CentreRelaisColis/modify/{id}', name: 'app_centre_relais_colis_modify')]
+    public function modify(CentreRelaisColis $centreRelaisColis): Response
+    {
+        if ($this->getUser()==false) {
+            return $this->redirectToRoute('app_login');
+        }else{
+            $user = $this->getUser();
+        }
+
+        return $this->render('centre_relais_colis/modify.html.twig', [
+            'user' => $user,
+            'leCentreRelaisColis' => $centreRelaisColis,
+        ]);
+    }
+
+    #[Route('/CentreRelaisColis/delete/{id}', name: 'app_centre_relais_colis_delete')]
+    public function delete(CentreRelaisColis $centreRelaisColis): Response
+    {
+        if ($this->getUser()==false) {
+            return $this->redirectToRoute('app_login');
+        }else{
+            $user = $this->getUser();
+        }
+
+
+        return $this->render('centre_relais_colis/delete.html.twig', [
+            'user' => $user,
+            'leCentreRelaisColis' => $centreRelaisColis,
+        ]);
+    }
 }

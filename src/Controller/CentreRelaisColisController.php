@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\CentreRelaisColis;
+use App\Form\CentreRelaisColisAddType;
 use App\Repository\CentreRelaisColisRepository;
 use App\Form\CentreRelaisColisModifyType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,8 +36,6 @@ class CentreRelaisColisController extends AbstractController
     {
         if ($this->getUser()==false) {
             return $this->redirectToRoute('app_login');
-        }else{
-            $user = $this->getUser();
         }
 
         $centreRelaisColisModify = $centreRelaisColis;
@@ -53,13 +52,15 @@ class CentreRelaisColisController extends AbstractController
 
         return $this->render('centre_relais_colis/modify.html.twig', [
             'form' => $form->createView(),
-            'user' => $user,
         ]);
     }
 
     #[Route('/CentreRelaisColis/delete/{id}', name: 'app_centre_relais_colis_delete')]
     public function delete(CentreRelaisColis $entite,Request $request, EntityManagerInterface $manager): Response
     {
+        if ($this->getUser()==false) {
+            return $this->redirectToRoute('app_login');
+        }
 
         if (!$entite) {
             throw $this->createNotFoundException('Entité non trouvée');
@@ -72,5 +73,31 @@ class CentreRelaisColisController extends AbstractController
 
         // Redirigez vers la page d'où provient la requête
         return $this->redirect($request->headers->get('referer'));
+    }
+
+    #[Route('/CentreRelaisColis/add', name: 'app_centre_relais_colis_add')]
+    public function add(Request $request, EntityManagerInterface $manager): Response
+    {
+        if ($this->getUser()==false) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $entite = new CentreRelaisColis();
+
+        $form = $this->createForm(CentreRelaisColisAddType::class, $entite);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($entite);
+            $manager->flush();
+
+            $this->addFlash('success', 'Nouvelle ligne ajoutée avec succès.');
+
+            return $this->redirectToRoute('app_centre_relais_colis');
+        }
+
+        return $this->render('centre_relais_colis/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

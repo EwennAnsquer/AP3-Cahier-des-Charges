@@ -32,7 +32,8 @@
                 <a href="{{ path('app_parametre') }}" class="text-decoration-none">Paramètres</a>
                 <a href="{{ path('app_logout') }}" class="text-decoration-none logoutButton mt-auto">Déconnexion</u></a>
             </div>
-            <div class="main col-10">
+            <div class="main col-10 pt-2">
+                <a href="{{path('app_centre_relais_colis_add')}}" type="button" class="btn btn-dark">Ajouter</a>
                 {% if centreRelaisColis is not empty%}
                     <table class="table">
                         <thead>

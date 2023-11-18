@@ -55,6 +55,7 @@
                                 <th scope="col">id</th>
                                 <th scope="col">email</th>
                                 <th scope="col">roles</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,9 +64,16 @@
                                     <th scope="row">{{unCompte.id}}</th>
                                     <td>{{unCompte.email}}</td>
                                     <td>
-                                        {% for unRole in unCompte.roles%}
+                                        {% for unRole in unCompte.roles %}
                                             {{unRole}}
                                         {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% if unCompte.lesCommandes is empty %}
+                                            pas de commandes
+                                        {% else %}
+                                            <a href="{{ path('app_client_commande', {id: unCompte.id}) }}" class="btn btn-primary" type="button">Commandes</a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}

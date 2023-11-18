@@ -33,4 +33,16 @@
             }
         }
     }
+    .mobileRow{
+        .leftNavBar{
+            background-color: #000000;
+            a{
+                color: white;
+                font-size: 3vh !important;
+            }
+            .logoutButton{
+                color: red;
+            }
+        }
+    }
 }

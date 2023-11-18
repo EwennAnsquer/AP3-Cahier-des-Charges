@@ -11,7 +11,8 @@
     <div class="container-fluid p-0 m-0 w-100">
         <div class="row firstRow w-100 ps-5 pe-5">
             <div class="d-flex flex-row align-items-center justify-content-end gap-4">
-                <button class="navbar-toggler me-auto d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- Button to toggle the navbar collapse -->
+                <button class="navbar-toggler me-auto d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="bi bi-list fs-1"></i>
                 </button>
                 <a href="{{ path('app_notification') }}">
@@ -22,14 +23,57 @@
                 </div>
             </div>
         </div>
-        <div class="row secondRow w-100 collapse d-lg-flex" id="navbarToggleExternalContent">
-            <div class="col-lg-2 leftNavBar d-flex flex-column align-items-center text-center p-4 gap-4">
+        <!-- Mobile Navbar for smaller screens -->
+        <div class="d-lg-none">
+            <div class="collapse mobileRow" id="navbarCollapse">
+                <div class="leftNavBar d-flex flex-column align-items-center text-center p-4 gap-4 pb-5">
+                    <a href="{{ path('app_rapports') }}" class="text-decoration-none fs-5">Rapports</a>
+                    <a href="{{ path('app_commande') }}" class="text-decoration-none fs-5">Commandes</a>
+                    <a href="{{ path('app_centre_relais_colis') }}" class="text-decoration-none fs-5">Centre de Relais Colis</a>
+                    <a href="{{ path('app_client') }}" class="text-decoration-none fs-5"><u>Clients</u></a>
+                    <a href="{{ path('app_parametre') }}" class="text-decoration-none fs-5">Paramètres</a>
+                    <a href="{{ path('app_logout') }}" class="text-decoration-none logoutButton fs-5">Déconnexion</u></a>
+                </div>
+            </div>
+        </div>
+        <div class="row secondRow w-100">
+            <!-- Left Navbar for larger screens -->
+            <div class="col-lg-2 leftNavBar d-none d-lg-flex flex-column align-items-center text-center p-4 gap-4">
                 <a href="{{ path('app_rapports') }}" class="text-decoration-none fs-5">Rapports</a>
                 <a href="{{ path('app_commande') }}" class="text-decoration-none fs-5">Commandes</a>
                 <a href="{{ path('app_centre_relais_colis') }}" class="text-decoration-none fs-5">Centre de Relais Colis</a>
                 <a href="{{ path('app_client') }}" class="text-decoration-none fs-5"><u>Clients</u></a>
                 <a href="{{ path('app_parametre') }}" class="text-decoration-none fs-5">Paramètres</a>
                 <a href="{{ path('app_logout') }}" class="text-decoration-none logoutButton fs-5">Déconnexion</u></a>
+            </div>
+            <!-- Main content -->
+            <div class="main col-12 col-lg-10 pt-2 mw-100">
+                {% if compteUtilisateur is not empty %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">email</th>
+                                <th scope="col">roles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for unCompte in compteUtilisateur %}
+                                <tr>
+                                    <th scope="row">{{unCompte.id}}</th>
+                                    <td>{{unCompte.email}}</td>
+                                    <td>
+                                        {% for unRole in unCompte.roles%}
+                                            {{unRole}}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="position-relative text-center top-50 start-50 translate-middle">Il n'y a aucun client ici.</p>
+                {% endif %}
             </div>
         </div>
     </div>

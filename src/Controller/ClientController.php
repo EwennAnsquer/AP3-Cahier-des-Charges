@@ -14,7 +14,7 @@ class ClientController extends AbstractController
     #[Route('/Client', name: 'app_client')]
     public function index(CompteUtilisateurRepository $compteUtilisateurRepository): Response
     {
-        if ($this->getUser()==false) {
+        if ($this->getUser()==false or $compteUtilisateurRepository->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
         }else{
             $user = $this->getUser();
@@ -29,9 +29,9 @@ class ClientController extends AbstractController
     }
 
     #[Route('/Client/Commandes/{id}', name: 'app_client_commande')]
-    public function commandes(CompteUtilisateur $compteUtilisateur): Response
+    public function commandes(CompteUtilisateur $compteUtilisateur, CompteUtilisateurRepository $c): Response
     {
-        if ($this->getUser()==false) {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
         }else{
             $user = $this->getUser();
@@ -44,9 +44,9 @@ class ClientController extends AbstractController
     }
 
     #[Route('/Client/Commandes/Colis/{id}', name: 'app_client_colis')]
-    public function colis(Commande $commande): Response
+    public function colis(Commande $commande, CompteUtilisateurRepository $c): Response
     {
-        if ($this->getUser()==false) {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
         }else{
             $user = $this->getUser();

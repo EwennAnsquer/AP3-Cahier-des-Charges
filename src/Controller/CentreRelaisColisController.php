@@ -11,13 +11,14 @@ use App\Repository\CentreRelaisColisRepository;
 use App\Form\CentreRelaisColisModifyType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use App\Repository\CompteUtilisateurRepository;
 
 class CentreRelaisColisController extends AbstractController
 {
     #[Route('/CentreRelaisColis', name: 'app_centre_relais_colis')]
-    public function index(CentreRelaisColisRepository $centreRelaisColisRepository): Response
+    public function index(CentreRelaisColisRepository $centreRelaisColisRepository, CompteUtilisateurRepository $c): Response
     {
-        if ($this->getUser()==false) {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
         }else{
             $user = $this->getUser();
@@ -32,9 +33,9 @@ class CentreRelaisColisController extends AbstractController
     }
 
     #[Route('/CentreRelaisColis/modify/{id}', name: 'app_centre_relais_colis_modify')]
-    public function modify(CentreRelaisColis $centreRelaisColis, Request $request, EntityManagerInterface $manager): Response
+    public function modify(CentreRelaisColis $centreRelaisColis, Request $request, EntityManagerInterface $manager, CompteUtilisateurRepository $c): Response
     {
-        if ($this->getUser()==false) {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
         }
 
@@ -56,9 +57,9 @@ class CentreRelaisColisController extends AbstractController
     }
 
     #[Route('/CentreRelaisColis/delete/{id}', name: 'app_centre_relais_colis_delete')]
-    public function delete(CentreRelaisColis $entite,Request $request, EntityManagerInterface $manager): Response
+    public function delete(CentreRelaisColis $entite,Request $request, EntityManagerInterface $manager, CompteUtilisateurRepository $c): Response
     {
-        if ($this->getUser()==false) {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
         }
 

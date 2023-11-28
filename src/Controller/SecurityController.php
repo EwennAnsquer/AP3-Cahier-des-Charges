@@ -6,14 +6,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use App\Repository\CompteUtilisateurRepository;
+use App\Entity\CompteUtilisateur;
 
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, CompteUtilisateurRepository $c): Response
     {
-        if ($this->getUser()) {
+        $user = $this->getUser();
+        if ($user instanceof CompteUtilisateur && $c->findOneBy(['id' => $user->getId()])->isIsRegister()) {
             return $this->redirectToRoute('app_rapports');
+        }
+
+        if($user instanceof CompteUtilisateur && $c->findOneBy(['id' => $user->getId()])->isIsRegister()==false){
+            return $this->redirectToRoute('app_logout');
         }
 
         // get the login error if there is one

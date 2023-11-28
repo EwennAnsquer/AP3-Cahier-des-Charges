@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[ORM\Entity(repositoryClass: CompteUtilisateurRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -144,6 +145,12 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
      */
     private $verificationToken;
 
+    #[ORM\Column]
+    private ?bool $isRegister = null;
+
+    #[ORM\Column]
+    private ?int $registerNumber = null;
+
     // ...
 
     public function getVerificationToken(): ?string
@@ -156,5 +163,41 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
         $this->verificationToken = $verificationToken;
 
         return $this;
+    }
+
+    public function isIsRegister(): ?bool
+    {
+        return $this->isRegister;
+    }
+
+    public function setIsRegister(bool $isRegister): static
+    {
+        $this->isRegister = $isRegister;
+
+        return $this;
+    }
+
+    public function getRegisterNumber(): ?int
+    {
+        return $this->registerNumber;
+    }
+
+    public function setRegisterNumber(int $registerNumber): static
+    {
+        $this->registerNumber = $registerNumber;
+
+        return $this;
+    }
+
+    public static function findByEmail(string $email, EntityManagerInterface $entityManagerInterface): ?self
+    {
+        return $entityManagerInterface
+            ->getRepository(self::class)
+            ->findOneBy(['email' => $email]);
+    }
+
+    public function isRegisterNumberCorrectForEmail(string $email, int $registerNumber): bool
+    {
+        return $this->getEmail() === $email && $this->getRegisterNumber() === $registerNumber;
     }
 }

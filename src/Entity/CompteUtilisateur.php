@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CompteUtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -151,7 +152,15 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
     #[ORM\Column]
     private ?int $registerNumber = null;
 
-    // ...
+    #[ORM\Column(nullable: true)]
+    private ?int $idCentreRelaisDefaut = null;
+
+    #[ORM\ManyToOne(inversedBy: 'compteUtilisateurs')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?TypeNotification $leTypeNotification = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $registerDate = null;
 
     public function getVerificationToken(): ?string
     {
@@ -199,5 +208,41 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
     public function isRegisterNumberCorrectForEmail(string $email, int $registerNumber): bool
     {
         return $this->getEmail() === $email && $this->getRegisterNumber() === $registerNumber;
+    }
+
+    public function getIdCentreRelaisDefaut(): ?int
+    {
+        return $this->idCentreRelaisDefaut;
+    }
+
+    public function setIdCentreRelaisDefaut(?int $idCentreRelaisDefaut): static
+    {
+        $this->idCentreRelaisDefaut = $idCentreRelaisDefaut;
+
+        return $this;
+    }
+
+    public function getLeTypeNotification(): ?TypeNotification
+    {
+        return $this->leTypeNotification;
+    }
+
+    public function setLeTypeNotification(?TypeNotification $leTypeNotification): static
+    {
+        $this->leTypeNotification = $leTypeNotification;
+
+        return $this;
+    }
+
+    public function getRegisterDate(): ?\DateTimeInterface
+    {
+        return $this->registerDate;
+    }
+
+    public function setRegisterDate(\DateTimeInterface $registerDate): static
+    {
+        $this->registerDate = $registerDate;
+
+        return $this;
     }
 }

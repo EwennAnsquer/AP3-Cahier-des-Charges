@@ -7,6 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Ville;
 
 class CentreRelaisColisModifyType extends AbstractType
 {
@@ -14,9 +16,12 @@ class CentreRelaisColisModifyType extends AbstractType
     {
         $builder
             ->add('adresse')
-            ->add('ville')
-            ->add('CodePostal')
-            ->add('Pays')
+            ->add('ville', EntityType::class, [
+                'class' => Ville::class,
+                'choice_label' => 'nom',
+                'label' => 'Ville',
+                //'data' => $options['selectTypeNotification']
+            ])
             ->add('Nom')
             ->add('save',SubmitType::class,['label'=>'Enregistrer'])
         ;

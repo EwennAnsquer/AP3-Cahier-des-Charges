@@ -48,7 +48,8 @@
             </div>
             <!-- Main content -->
             <div class="main col-12 col-lg-10 pt-2 mw-100">
-                <a href="{{path('app_centre_relais_colis_add')}}" type="button" class="btn btn-dark">Ajouter</a>
+                <a href="{{path('app_centre_relais_colis_add')}}" type="button" class="btn btn-dark">Ajouter un Centre</a>
+                <a href="{{path('app_centre_relais_colis_ville_add')}}" type="button" class="btn btn-dark">Ajouter une Ville</a>
                 {% if centreRelaisColis is not empty%}
                     <table class="table">
                         <thead>
@@ -69,9 +70,9 @@
                                     <th scope="row">{{unCentre.id}}</th>
                                     <td>{{unCentre.nom}}</td>
                                     <td>{{unCentre.adresse}}</td>
-                                    <td>{{unCentre.ville}}</td>
-                                    <td>{{unCentre.codePostal}}</td>
-                                    <td>{{unCentre.pays}}</td>
+                                    <td>{{unCentre.ville.nom}}</td>
+                                    <td>{{unCentre.ville.codePostal}}</td>
+                                    <td>{{unCentre.ville.pays}}</td>
                                     <td>
                                         <a href="{{path('app_centre_relais_colis_modify', {'id': unCentre.id})}}" type="button" class="btn btn-warning">Éditer</a>
                                     </td>

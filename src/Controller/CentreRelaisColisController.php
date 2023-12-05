@@ -129,4 +129,20 @@ class CentreRelaisColisController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/CentreRelaisColis/localisation/{id}', name: 'app_centre_relais_colis_localisation')]
+    public function localisation(Ville $ville, CompteUtilisateurRepository $c): Response
+    {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if (!$ville) {
+            throw $this->createNotFoundException('Ville non trouvée');
+        }
+
+        return $this->render('centre_relais_colis/localisation.html.twig',[
+            'ville'=>$ville
+        ]);
+    }
 }

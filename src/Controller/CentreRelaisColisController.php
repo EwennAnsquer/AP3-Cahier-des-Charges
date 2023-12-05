@@ -12,6 +12,8 @@ use App\Form\CentreRelaisColisModifyType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\CompteUtilisateurRepository;
+use App\Entity\Ville;
+use App\Form\VilleType;
 
 class CentreRelaisColisController extends AbstractController
 {
@@ -77,9 +79,9 @@ class CentreRelaisColisController extends AbstractController
     }
 
     #[Route('/CentreRelaisColis/add', name: 'app_centre_relais_colis_add')]
-    public function add(Request $request, EntityManagerInterface $manager): Response
+    public function addCentre(Request $request, EntityManagerInterface $manager, CompteUtilisateurRepository $c): Response
     {
-        if ($this->getUser()==false) {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
         }
 
@@ -98,6 +100,32 @@ class CentreRelaisColisController extends AbstractController
         }
 
         return $this->render('centre_relais_colis/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/CentreRelaisColis/ville/add', name: 'app_centre_relais_colis_ville_add')]
+    public function addVille(Request $request, EntityManagerInterface $manager, CompteUtilisateurRepository $c): Response
+    {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $entite = new Ville();
+
+        $form = $this->createForm(VilleType::class, $entite);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($entite);
+            $manager->flush();
+
+            $this->addFlash('success', 'Nouvelle ligne ajoutée avec succès.');
+
+            return $this->redirectToRoute('app_centre_relais_colis');
+        }
+
+        return $this->render('centre_relais_colis/addVille.html.twig', [
             'form' => $form->createView(),
         ]);
     }

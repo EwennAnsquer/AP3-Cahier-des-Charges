@@ -152,15 +152,16 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
     #[ORM\Column]
     private ?int $registerNumber = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $idCentreRelaisDefaut = null;
-
     #[ORM\ManyToOne(inversedBy: 'compteUtilisateurs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?TypeNotification $leTypeNotification = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $registerDate = null;
+
+    #[ORM\ManyToOne(inversedBy: 'compteUtilisateurs')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?CentreRelaisColis $leCentreRelaisColisDefaut = null;
 
     public function getVerificationToken(): ?string
     {
@@ -210,18 +211,6 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
         return $this->getEmail() === $email && $this->getRegisterNumber() === $registerNumber;
     }
 
-    public function getIdCentreRelaisDefaut(): ?int
-    {
-        return $this->idCentreRelaisDefaut;
-    }
-
-    public function setIdCentreRelaisDefaut(?int $idCentreRelaisDefaut): static
-    {
-        $this->idCentreRelaisDefaut = $idCentreRelaisDefaut;
-
-        return $this;
-    }
-
     public function getLeTypeNotification(): ?TypeNotification
     {
         return $this->leTypeNotification;
@@ -242,6 +231,18 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
     public function setRegisterDate(\DateTimeInterface $registerDate): static
     {
         $this->registerDate = $registerDate;
+
+        return $this;
+    }
+
+    public function getLeCentreRelaisColisDefaut(): ?CentreRelaisColis
+    {
+        return $this->leCentreRelaisColisDefaut;
+    }
+
+    public function setLeCentreRelaisColisDefaut(?CentreRelaisColis $leCentreRelaisColisDefaut): static
+    {
+        $this->leCentreRelaisColisDefaut = $leCentreRelaisColisDefaut;
 
         return $this;
     }

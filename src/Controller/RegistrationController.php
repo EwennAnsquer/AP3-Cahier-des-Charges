@@ -117,7 +117,7 @@ class RegistrationController extends AbstractController
             $now = new Datetime();
             $interval = $now->diff($registerDate);
     
-            if ($user && $interval->i<1) {
+            if ($user && $interval->i<10) {
                 $user->setIsregister(true);
                 $entityManager->flush();
                 return $this->redirectToRoute('app_rapports');

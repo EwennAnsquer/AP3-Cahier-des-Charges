@@ -18,24 +18,23 @@ class CentreRelaisColis
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $ville = null;
-
-    #[ORM\Column]
-    private ?int $CodePostal = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Pays = null;
-
     #[ORM\OneToMany(mappedBy: 'leCentreRelaisColis', targetEntity: Casier::class)]
     private Collection $lesCasiers;
 
     #[ORM\Column(length: 255)]
     private ?string $Nom = null;
 
+    #[ORM\OneToMany(mappedBy: 'leCentreRelaisColisDefaut', targetEntity: CompteUtilisateur::class, orphanRemoval: false)]
+    private Collection $compteUtilisateurs;
+
+    #[ORM\ManyToOne(inversedBy: 'lesCentresRelaisColis')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Ville $ville = null;
+
     public function __construct()
     {
         $this->lesCasiers = new ArrayCollection();
+        $this->compteUtilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,42 +50,6 @@ class CentreRelaisColis
     public function setAdresse(string $adresse): static
     {
         $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    public function getVille(): ?string
-    {
-        return $this->ville;
-    }
-
-    public function setVille(string $ville): static
-    {
-        $this->ville = $ville;
-
-        return $this;
-    }
-
-    public function getCodePostal(): ?int
-    {
-        return $this->CodePostal;
-    }
-
-    public function setCodePostal(int $CodePostal): static
-    {
-        $this->CodePostal = $CodePostal;
-
-        return $this;
-    }
-
-    public function getPays(): ?string
-    {
-        return $this->Pays;
-    }
-
-    public function setPays(string $Pays): static
-    {
-        $this->Pays = $Pays;
 
         return $this;
     }
@@ -129,6 +92,48 @@ class CentreRelaisColis
     public function setNom(string $Nom): static
     {
         $this->Nom = $Nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CompteUtilisateur>
+     */
+    public function getCompteUtilisateurs(): Collection
+    {
+        return $this->compteUtilisateurs;
+    }
+
+    public function addCompteUtilisateur(CompteUtilisateur $compteUtilisateur): static
+    {
+        if (!$this->compteUtilisateurs->contains($compteUtilisateur)) {
+            $this->compteUtilisateurs->add($compteUtilisateur);
+            $compteUtilisateur->setLeCentreRelaisColisDefaut($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompteUtilisateur(CompteUtilisateur $compteUtilisateur): static
+    {
+        if ($this->compteUtilisateurs->removeElement($compteUtilisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($compteUtilisateur->getLeCentreRelaisColisDefaut() === $this) {
+                $compteUtilisateur->setLeCentreRelaisColisDefaut(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getVille(): ?Ville
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?Ville $ville): static
+    {
+        $this->ville = $ville;
 
         return $this;
     }

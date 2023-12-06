@@ -70,7 +70,9 @@
                                     <th scope="row">{{unCentre.id}}</th>
                                     <td>{{unCentre.nom}}</td>
                                     <td>{{unCentre.adresse}}</td>
-                                    <td>{{unCentre.ville.nom}}</td>
+                                    <td>
+                                        <a href="{{path('app_centre_relais_colis_localisation', {'id': unCentre.ville.id})}}" type="button" title="Localisation de tous les Centre de Relais Colis de {{unCentre.ville.nom}}" class="btn btn-dark">{{unCentre.ville.nom}}</a>
+                                    </td>
                                     <td>{{unCentre.ville.codePostal}}</td>
                                     <td>{{unCentre.ville.pays}}</td>
                                     <td>

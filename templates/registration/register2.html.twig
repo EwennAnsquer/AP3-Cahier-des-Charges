@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+{% block stylesheets %}
+{% endblock %}
+<div class="container">
+<form name="registration_form" method="post">
+    <div class="form-outline mb-4">
+        <label for="registration_form_email" class="required, form-label">Email</label>
+        <input class="form-control" type="text" id="registration_form_email" name="registration_form[email]" required="required" maxlength="180" autocomplete="email" required autofocus>
+    </div>
+    <div class="form-outline mb-4">
+        <label for="registration_form_plainPassword" class="required,form-label">Mot de Passe</label>
+        <input type="password" class="form-control" id="registration_form_plainPassword" name="registration_form[plainPassword]" required="required" autocomplete="new-password" autocomplete="email" required autofocus>
+    </div>
+
+    <div class="container, p-0">
+        <div class="row">
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary btn-block mb-4">S'inscrire</button>
+            </div>
+            <div class="col-6 float-right">
+                <label for="registration_form_agreeTerms" class="required">Acceptation des conditions</label>
+                <input type="checkbox" id="registration_form_agreeTerms" name="registration_form[agreeTerms]" required="required" value="1">
+                <p class="p-0">Vous avez déjà un compte ? <a href="{{ path('app_login') }}">s'identifier</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        
+    </div>
+</form>
+</div>
+
+{% endblock %}

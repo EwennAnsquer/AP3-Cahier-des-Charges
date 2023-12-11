@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Centre Relais Colis{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('localisation') }}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block body %}
+
+<a href="{{path('app_centre_relais_colis')}}" type="button" class="btn btn-dark">Retour</a>
+
+{{ville.nom}}
+
+<div class="container">
+    <div class="d-flex justify-content-center mapContainer" >
+        <div id="map"></div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+crossorigin=""></script>
+
+<script type="module" src={{asset('./scripts/localisation-app.js')}}></script>
+    
+{% endblock %}

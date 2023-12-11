@@ -24,12 +24,12 @@ async function addAllCentreRelaisColisMarker(centreRelaisColis, villeData, paysD
 async function initializeMap() {
     try {
         const url = window.location.href;
-        const urlprotocolHost = window.location.protocol + "//" +window.location.host;
+        const urlProtocolHost = window.location.protocol + "//" +window.location.host;
         const idVille = url.charAt(url.length - 1);
 
-        const villeData = await fetchData(urlprotocolHost+"/api/villes/" + idVille);
+        const villeData = await fetchData(urlProtocolHost+"/api/villes/" + idVille);
         const centresRelaisColis = villeData.lesCentresRelaisColis;
-        const paysData = await fetchData(urlprotocolHost + "/api/payss/1");
+        const paysData = await fetchData(urlProtocolHost + villeData.lePays);
 
         const geocodeData = await fetchData("https://geocode.maps.co/search?city=" + villeData.nom + "&country=" + paysData.nom + "&postalcode=" + villeData.codePostal);
 
@@ -39,7 +39,7 @@ async function initializeMap() {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        await addAllCentreRelaisColisMarker(centresRelaisColis, villeData, paysData, map, urlprotocolHost);
+        await addAllCentreRelaisColisMarker(centresRelaisColis, villeData, paysData, map, urlProtocolHost);
 
     } catch (error) {
         alert(error.message);

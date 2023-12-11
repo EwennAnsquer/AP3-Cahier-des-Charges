@@ -4,8 +4,15 @@ namespace App\Entity;
 
 use App\Repository\ColisRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 
 #[ORM\Entity(repositoryClass: ColisRepository::class)]
+#[ApiResource(
+    operations:[
+        new Get(),
+    ]
+)]
 class Colis
 {
     #[ORM\Id]

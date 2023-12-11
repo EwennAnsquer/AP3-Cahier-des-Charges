@@ -17,19 +17,10 @@ class Commande
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Pays = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $PrenomAcheteur = null;
 
     #[ORM\Column(length: 255)]
     private ?string $NomAcheteur = null;
-
-    #[ORM\Column]
-    private ?int $CodePostal = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Ville = null;
 
     #[ORM\Column]
     private ?int $NumeroTelephone = null;
@@ -55,6 +46,15 @@ class Commande
     #[ORM\ManyToOne(inversedBy: 'lesCommandes')]
     private ?CompteUtilisateur $leCompteUtilisateur = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $adresse = null;
+
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    private ?Ville $laVille = null;
+
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    private ?Pays $lePays = null;
+
     public function __construct()
     {
         $this->lesColis = new ArrayCollection();
@@ -64,18 +64,6 @@ class Commande
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getPays(): ?string
-    {
-        return $this->Pays;
-    }
-
-    public function setPays(string $Pays): static
-    {
-        $this->Pays = $Pays;
-
-        return $this;
     }
 
     public function getPrenomAcheteur(): ?string
@@ -98,30 +86,6 @@ class Commande
     public function setNomAcheteur(string $NomAcheteur): static
     {
         $this->NomAcheteur = $NomAcheteur;
-
-        return $this;
-    }
-
-    public function getCodePostal(): ?int
-    {
-        return $this->CodePostal;
-    }
-
-    public function setCodePostal(int $CodePostal): static
-    {
-        $this->CodePostal = $CodePostal;
-
-        return $this;
-    }
-
-    public function getVille(): ?string
-    {
-        return $this->Ville;
-    }
-
-    public function setVille(string $Ville): static
-    {
-        $this->Ville = $Ville;
 
         return $this;
     }
@@ -248,6 +212,42 @@ class Commande
     public function setLeCompteUtilisateur(?CompteUtilisateur $leCompteUtilisateur): static
     {
         $this->leCompteUtilisateur = $leCompteUtilisateur;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): static
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getLaVille(): ?Ville
+    {
+        return $this->laVille;
+    }
+
+    public function setLaVille(?Ville $laVille): static
+    {
+        $this->laVille = $laVille;
+
+        return $this;
+    }
+
+    public function getLePays(): ?Pays
+    {
+        return $this->lePays;
+    }
+
+    public function setLePays(?Pays $lePays): static
+    {
+        $this->lePays = $lePays;
 
         return $this;
     }

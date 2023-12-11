@@ -29,9 +29,13 @@ class Ville
     #[ORM\OneToMany(mappedBy: 'ville', targetEntity: CentreRelaisColis::class)]
     private Collection $lesCentresRelaisColis;
 
+    #[ORM\OneToMany(mappedBy: 'laVille', targetEntity: Commande::class)]
+    private Collection $commandes;
+
     public function __construct()
     {
         $this->lesCentresRelaisColis = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,6 +103,36 @@ class Ville
             // set the owning side to null (unless already changed)
             if ($lesCentresRelaisColi->getVille() === $this) {
                 $lesCentresRelaisColi->setVille(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): static
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->setLaVille($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): static
+    {
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getLaVille() === $this) {
+                $commande->setLaVille(null);
             }
         }
 

@@ -10,18 +10,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use PHPMailer\PHPMailer;
 use App\Form\RegisterEmailType;
 use App\Repository\CompteUtilisateurRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\CallbackTransformer;
 use App\Repository\TypeNotificationRepository;
 use DateTime;
-use DateInterval;
 
 class RegistrationController extends AbstractController
 {

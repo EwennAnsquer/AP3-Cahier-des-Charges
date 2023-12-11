@@ -6,8 +6,15 @@ use App\Repository\PaysRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 
 #[ORM\Entity(repositoryClass: PaysRepository::class)]
+#[ApiResource(
+    operations:[
+        new Get(),
+    ]
+)]
 class Pays
 {
     #[ORM\Id]
@@ -21,9 +28,13 @@ class Pays
     #[ORM\OneToMany(mappedBy: 'lePays', targetEntity: Commande::class)]
     private Collection $commandes;
 
+    #[ORM\OneToMany(mappedBy: 'lePays', targetEntity: Ville::class)]
+    private Collection $villes;
+
     public function __construct()
     {
         $this->commandes = new ArrayCollection();
+        $this->villes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,6 +78,36 @@ class Pays
             // set the owning side to null (unless already changed)
             if ($commande->getLePays() === $this) {
                 $commande->setLePays(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ville>
+     */
+    public function getVilles(): Collection
+    {
+        return $this->villes;
+    }
+
+    public function addVille(Ville $ville): static
+    {
+        if (!$this->villes->contains($ville)) {
+            $this->villes->add($ville);
+            $ville->setLePays($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVille(Ville $ville): static
+    {
+        if ($this->villes->removeElement($ville)) {
+            // set the owning side to null (unless already changed)
+            if ($ville->getLePays() === $this) {
+                $ville->setLePays(null);
             }
         }
 

@@ -11,9 +11,16 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 
 #[ORM\Entity(repositoryClass: CompteUtilisateurRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[ApiResource(
+    operations:[
+        new Get(),
+    ]
+)]
 class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

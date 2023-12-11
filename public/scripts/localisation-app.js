@@ -8,10 +8,11 @@ async function fetchData(url) {
     }
 }
 
-async function addAllCentreRelaisColisMarker(centreRelaisColis, villeData, map){
+async function addAllCentreRelaisColisMarker(centreRelaisColis, villeData, paysData, map, urlprotocolHost){
     try{
         for (const e of centreRelaisColis) {
-            const data = await fetchData("https://geocode.maps.co/search?city=" + villeData.nom + "&country=" + villeData.pays + "&postalcode=" + villeData.codePostal + "&street=" + e.adresse);
+            const centreData = await fetchData(urlprotocolHost+e);
+            const data = await fetchData("https://geocode.maps.co/search?city=" + villeData.nom + "&country=" + paysData.nom + "&postalcode=" + villeData.codePostal + "&street=" + centreData.adresse);
             var markerCentreRelais = L.marker([data[0].lat, data[0].lon]).addTo(map);
             markerCentreRelais.bindPopup(data[0].display_name);
         }
@@ -28,10 +29,9 @@ async function initializeMap() {
 
         const villeData = await fetchData(urlprotocolHost+"/api/villes/" + idVille);
         const centresRelaisColis = villeData.lesCentresRelaisColis;
+        const paysData = await fetchData(urlprotocolHost + "/api/payss/1");
 
-        console.log(centresRelaisColis)
-
-        const geocodeData = await fetchData("https://geocode.maps.co/search?city=" + villeData.nom + "&country=" + villeData.pays + "&postalcode=" + villeData.codePostal);
+        const geocodeData = await fetchData("https://geocode.maps.co/search?city=" + villeData.nom + "&country=" + paysData.nom + "&postalcode=" + villeData.codePostal);
 
         const map = L.map('map').setView([geocodeData[0].lat, geocodeData[0].lon],10);
 
@@ -39,7 +39,7 @@ async function initializeMap() {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        await addAllCentreRelaisColisMarker(centresRelaisColis, villeData, map);
+        await addAllCentreRelaisColisMarker(centresRelaisColis, villeData, paysData, map, urlprotocolHost);
 
     } catch (error) {
         alert(error.message);

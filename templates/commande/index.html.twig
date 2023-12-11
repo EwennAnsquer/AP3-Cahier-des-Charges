@@ -49,6 +49,58 @@
             <!-- Main content -->
             <div class="main col-12 col-lg-10 pt-2 mw-100">
                 <a href="{{path('app_commande_add')}}" type="button" class="btn btn-dark">Créer une Commande</a>
+                {% if commandes is not empty%}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">email</th>
+                                <th scope="col">prenom</th>
+                                <th scope="col">nom</th>
+                                <th scope="col">telephone</th>
+                                <th scope="col">volume</th>
+                                <th scope="col">poids</th>
+                                <th scope="col">etat</th>
+                                <th scope="col">ville</th>
+                                <th scope="col">pays</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in commandes %}
+                                <tr>
+                                    <th scope="row">{{c.id}}</th>
+                                    <td>{{c.leCompteUtilisateur.email}}</td>
+                                    <td>{{c.PrenomAcheteur}}</td>
+                                    <td>{{c.NomAcheteur}}</td>
+                                    <td>
+                                        {% set integerAsString = c.NumeroTelephone|split('') %}
+                                        {% set length = integerAsString|length %}
+                                        {% if length!=10 %}
+                                            {{"0"~c.NumeroTelephone}}
+                                        {% else %}
+                                            {{c.NumeroTelephone}}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{c.Volume}}</td>
+                                    <td>{{c.poids}}</td>
+                                    <td>{{c.etat}}</td>
+                                    <td>{{c.laVille.nom}}</td>
+                                    <td>{{c.laVille.lePays.nom}}</td>
+                                    <td>
+                                        <a href="{{path('app_commande_modify', {'id': c.id})}}" type="button" class="btn btn-warning">Éditer</a>
+                                    </td>
+                                    <td>
+                                        <a href="{{path('app_commande_delete', {'id': c.id})}}" type="button" class="btn btn-danger">Supprimer</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="position-relative text-center top-50 start-50 translate-middle">Il n'y a aucune commande.</p>
+                {% endif %}
             </div>
         </div>
     </div>

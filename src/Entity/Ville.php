@@ -7,9 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 
 #[ORM\Entity(repositoryClass: VilleRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations:[
+        new Get(),
+    ]
+)]
 class Ville
 {
     #[ORM\Id]
@@ -23,14 +28,14 @@ class Ville
     #[ORM\Column]
     private ?int $codePostal = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $pays = null;
-
     #[ORM\OneToMany(mappedBy: 'ville', targetEntity: CentreRelaisColis::class)]
     private Collection $lesCentresRelaisColis;
 
     #[ORM\OneToMany(mappedBy: 'laVille', targetEntity: Commande::class)]
     private Collection $commandes;
+
+    #[ORM\ManyToOne(inversedBy: 'villes')]
+    private ?Pays $lePays = null;
 
     public function __construct()
     {
@@ -63,18 +68,6 @@ class Ville
     public function setCodePostal(int $codePostal): static
     {
         $this->codePostal = $codePostal;
-
-        return $this;
-    }
-
-    public function getPays(): ?string
-    {
-        return $this->pays;
-    }
-
-    public function setPays(string $pays): static
-    {
-        $this->pays = $pays;
 
         return $this;
     }
@@ -135,6 +128,18 @@ class Ville
                 $commande->setLaVille(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLePays(): ?Pays
+    {
+        return $this->lePays;
+    }
+
+    public function setLePays(?Pays $lePays): static
+    {
+        $this->lePays = $lePays;
 
         return $this;
     }

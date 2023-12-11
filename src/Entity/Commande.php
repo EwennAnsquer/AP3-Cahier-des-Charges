@@ -30,9 +30,6 @@ class Commande
     private ?string $NomAcheteur = null;
 
     #[ORM\Column]
-    private ?int $NumeroTelephone = null;
-
-    #[ORM\Column]
     private ?int $Volume = null;
 
     #[ORM\Column]
@@ -61,6 +58,9 @@ class Commande
 
     #[ORM\ManyToOne(inversedBy: 'commandes')]
     private ?Pays $lePays = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $NumeroTelephone = null;
 
     public function __construct()
     {
@@ -93,18 +93,6 @@ class Commande
     public function setNomAcheteur(string $NomAcheteur): static
     {
         $this->NomAcheteur = $NomAcheteur;
-
-        return $this;
-    }
-
-    public function getNumeroTelephone(): ?int
-    {
-        return $this->NumeroTelephone;
-    }
-
-    public function setNumeroTelephone(int $NumeroTelephone): static
-    {
-        $this->NumeroTelephone = $NumeroTelephone;
 
         return $this;
     }
@@ -255,6 +243,18 @@ class Commande
     public function setLePays(?Pays $lePays): static
     {
         $this->lePays = $lePays;
+
+        return $this;
+    }
+
+    public function getNumeroTelephone(): ?string
+    {
+        return $this->NumeroTelephone;
+    }
+
+    public function setNumeroTelephone(string $NumeroTelephone): static
+    {
+        $this->NumeroTelephone = $NumeroTelephone;
 
         return $this;
     }

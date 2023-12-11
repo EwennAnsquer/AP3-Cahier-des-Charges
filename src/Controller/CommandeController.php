@@ -47,14 +47,20 @@ class CommandeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $commande->setEtat("en préparation");
-            $commande->setLeCompteUtilisateur($user);
-            $e->persist($commande);
-            $e->flush();
+            $data = $form->get('NumeroTelephone')->getData();
 
-            $this->addFlash('success', 'Nouvelle ligne ajoutée avec succès.');
+            if (preg_match('/^\d{10}$/', $data)) { //vérifie si NumeroTelephone contient 10 chiffres
+                $commande->setEtat("en préparation");
+                $commande->setLeCompteUtilisateur($user);
+                $e->persist($commande);
+                $e->flush();
 
-            return $this->redirectToRoute('app_commande');
+                $this->addFlash('success', 'Nouvelle ligne ajoutée avec succès.');
+
+                return $this->redirectToRoute('app_commande');
+            }else {
+                $this->addFlash('error', 'Le numéro de téléphone doit contenir exactement 10 chiffres.');
+            }
         }
 
         return $this->render('commande/add.html.twig',[
@@ -77,12 +83,18 @@ class CommandeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $e->persist($commande);
-            $e->flush();
+            $data = $form->get('NumeroTelephone')->getData();
 
-            $this->addFlash('success', 'La ligne a été modifié avec succès.');
-
-            return $this->redirectToRoute('app_commande');
+            if (preg_match('/^\d{10}$/', $data)) { //vérifie si NumeroTelephone contient 10 chiffres
+                $e->persist($commande);
+                $e->flush();
+    
+                $this->addFlash('success', 'La ligne a été modifié avec succès.');
+    
+                return $this->redirectToRoute('app_commande');
+            }else {
+                $this->addFlash('error', 'Le numéro de téléphone doit contenir exactement 10 chiffres.');
+            }
         }
 
         return $this->render('commande/modify.html.twig',[

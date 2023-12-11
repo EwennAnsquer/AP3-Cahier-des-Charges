@@ -9,7 +9,14 @@
 {% block body %}
     modify
 
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <script>
+            alert("{{ flashMessage }}");
+        </script>
+    {% endfor %}
+
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
+
 {% endblock %}

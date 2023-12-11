@@ -74,15 +74,7 @@
                                     <td>{{c.leCompteUtilisateur.email}}</td>
                                     <td>{{c.PrenomAcheteur}}</td>
                                     <td>{{c.NomAcheteur}}</td>
-                                    <td>
-                                        {% set integerAsString = c.NumeroTelephone|split('') %}
-                                        {% set length = integerAsString|length %}
-                                        {% if length!=10 %}
-                                            {{"0"~c.NumeroTelephone}}
-                                        {% else %}
-                                            {{c.NumeroTelephone}}
-                                        {% endif %}
-                                    </td>
+                                    <td>{{c.NumeroTelephone}}</td>
                                     <td>{{c.Volume}}</td>
                                     <td>{{c.poids}}</td>
                                     <td>{{c.etat}}</td>

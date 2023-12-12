@@ -65,6 +65,7 @@
                                 <th scope="col">pays</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,6 +81,9 @@
                                     <td>{{c.etat}}</td>
                                     <td>{{c.laVille.nom}}</td>
                                     <td>{{c.laVille.lePays.nom}}</td>
+                                    <td>
+                                        <a href="{{path('app_commande_colis', {'id': c.id})}}" type="button" class="btn btn-dark">Colis</a>
+                                    </td>
                                     <td>
                                         <a href="{{path('app_commande_modify', {'id': c.id})}}" type="button" class="btn btn-warning">Éditer</a>
                                     </td>

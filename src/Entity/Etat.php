@@ -18,6 +18,16 @@ class Etat
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
+    /*
+    en préparation
+    Prêt à expédier
+    Expédié
+    En transit
+    En cours de livraison
+    Livré 
+    En attente de ramassage
+    */
+
     #[ORM\OneToMany(mappedBy: 'etat', targetEntity: Colis::class)]
     private Collection $lesColis;
 

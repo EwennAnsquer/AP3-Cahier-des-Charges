@@ -81,10 +81,12 @@ class Colis
         return $this->casier;
     }
 
-    public function setCasier(?Casier $casier)
+    public function setCasier(?Casier $casier): static
     {
         $this->casier = $casier;
-    }
+    
+        return $this;
+    }    
 
     public function getEtat(): ?Etat
     {

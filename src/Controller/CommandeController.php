@@ -13,6 +13,8 @@ use App\Form\CommandeAddType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CommandeRepository;
+use PHPMailer\PHPMailer;
+use App\Entity\CompteUtilisateur;
 
 class CommandeController extends AbstractController
 {
@@ -140,11 +142,15 @@ class CommandeController extends AbstractController
     }
 
     #[Route('/commande/colis/modify/{id}', name: 'app_commande_colis_modify')]
-    public function modifyColis(Colis $colis, Request $request, CompteUtilisateurRepository $c, EntityManagerInterface $e): Response
+    public function modifyColis(Colis $colis, Request $request, CompteUtilisateurRepository $c, EntityManagerInterface $e, CompteUtilisateurRepository $compteUtilisateurRepository): Response
     {
         if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
+        }else{
+            $user = $this->getUser();
         }
+
+        $ancienColis = clone $colis;
 
         $form = $this->createForm(ColisModifyType::class, $colis);
 
@@ -155,6 +161,39 @@ class CommandeController extends AbstractController
                 $e->flush();
     
                 $this->addFlash('success', 'La ligne a été modifié avec succès.');
+
+                if($colis->getLaCommande()->getLeCompteUtilisateur()->getLeTypeNotification()->getNom() == "email" && $this->compareColisEtat($ancienColis, $colis) === false){
+                    // Créer une nouvelle instance de PHPMailer
+                    $mail = new PHPMailer\PHPMailer();
+
+                    // Activer le mode de débogage (0 pour désactiver)
+                    $mail->SMTPDebug = 0;
+
+                    // Définir le type de transport sur SMTP
+                    $mail->isSMTP();
+
+                    // Hôte du serveur SMTP (MailHog utilise souvent le port 1025)
+                    $mail->Host = 'localhost';
+                    $mail->Port = 1025;
+
+                    // Désactiver l'authentification SMTP (MailHog n'a généralement pas besoin d'authentification)
+                    $mail->SMTPAuth = false;
+
+                    // Définir l'expéditeur et le destinataire
+                    $mail->setFrom('no-reply@ap3-retrait-colis.com', 'AP3 Retrait Colis');
+                    $mail->addAddress($compteUtilisateurRepository->find($user)->getEmail());
+
+                    // Définir le sujet du mail
+                    $mail->Subject = 'Notification Etat Colis';
+
+                    // Corps du mail au format HTML
+                    $mail->msgHTML('
+                        <p>C\'est la notification.</p>
+                        <p>Votre colis est passé à l\'état '.$colis->getEtat()->getNom().'</p>
+                    ');
+
+                    $mail->send();
+                }
     
                 return $this->redirectToRoute('app_commande_colis',[
                     'id' => $colis->getId()
@@ -165,6 +204,16 @@ class CommandeController extends AbstractController
             'form' => $form->createView(),
             'id' => $colis->getId()
         ]);
+    }
+
+    //si l'ancien et le nouveau colis ont les mêmes état alors renvoyer true sinon renvoyer false
+    private function compareColisEtat(Colis $ancienColis, Colis $nouveauColis) 
+    {
+        if($ancienColis->getEtat()->getNom() == $nouveauColis->getEtat()->getNom()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     #[Route('/commande/colis/delete/{id}', name: 'app_commande_colis_delete')]

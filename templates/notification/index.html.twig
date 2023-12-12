@@ -15,9 +15,11 @@
                 <button class="navbar-toggler me-auto d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="bi bi-list fs-1"></i>
                 </button>
-                <a href="{{ path('app_notification') }}">
-                    <img class="notificationBell" src="{{ asset('img/Bell.png') }}" alt="notification button">
-                </a>
+                {% if user.leTypeNotification.nom == "email" %}
+                    <a href="{{ path('app_notification') }}">
+                        <img class="notificationBell" src="{{ asset('img/Bell.png') }}" alt="notification button">
+                    </a>
+                {% endif %}
                 <div class="profile rounded-circle d-flex justify-content-center align-items-center">
                     {{user.email|slice(0, 1)|upper}}
                 </div>
@@ -48,7 +50,7 @@
             </div>
             <!-- Main content -->
             <div class="main col-12 col-lg-10 pt-2 mw-100">
-                
+                <h1>Notification</h1>
             </div>
         </div>
     </div>

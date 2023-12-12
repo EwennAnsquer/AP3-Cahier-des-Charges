@@ -22,6 +22,10 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addEntry('login-register','./assets/login.js')
+    .addEntry('navbar','./assets/navbar.js')
+    .addEntry('centreRelaisColis','./assets/centreRelaisColis.js')
+    .addEntry('localisation','./assets/localisation.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -55,7 +59,7 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()

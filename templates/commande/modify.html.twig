@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+    modify
+
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <script>
+            alert("{{ flashMessage }}");
+        </script>
+    {% endfor %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+{% endblock %}

@@ -1,0 +1,20 @@
+Notification pour état du colis:
+
+DELIMITER //
+
+CREATE TRIGGER changement_etat_colis
+AFTER UPDATE ON colis
+FOR EACH ROW
+BEGIN
+    IF NEW.etat_id <> OLD.etat_id THEN
+        INSERT INTO notification(le_compte_utilisateur_id, le_type_notification_id, titre, date)
+        SELECT commande.le_compte_utilisateur_id, compte_utilisateur.le_type_notification_id, 'Changement etat colis', NOW()
+        FROM commande
+        INNER JOIN compte_utilisateur ON compte_utilisateur.id = commande.le_compte_utilisateur_id
+        WHERE commande.id = NEW.la_commande_id;
+    END IF;
+END;
+
+//
+
+DELIMITER ;

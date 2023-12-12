@@ -17,6 +17,11 @@ class NotificationController extends AbstractController
         }else{
             $user = $this->getUser();
         }
+
+        if ($c->find($this->getUser())->getLeTypeNotification()->getNom() != "email") {
+            return $this->redirectToRoute('app_rapports');
+        }
+
         return $this->render('notification/index.html.twig', [
             'user' => $user,
         ]);

@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\CompteUtilisateurRepository;
 use App\Entity\Ville;
 use App\Form\VilleType;
+use App\Repository\CasierRepository;
 
 class CentreRelaisColisController extends AbstractController
 {
@@ -148,17 +149,30 @@ class CentreRelaisColisController extends AbstractController
     }
 
     #[Route('/CentreRelaisColis/casier/{id}', name: 'app_centre_relais_colis_casier')]
-    public function casier(CentreRelaisColis $centreRelaisColis, CompteUtilisateurRepository $c): Response
+    public function casier(CentreRelaisColis $centreRelaisColis, CompteUtilisateurRepository $c, CasierRepository $casierRepository): Response
     {
         if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
         }
 
         $allCasier = $centreRelaisColis->getLesCasiers();
+        $allCasier = $allCasier->toArray();
+
+        usort($allCasier, [ $this, 'trierCasierParVolumeGrandAPetit' ]);
+
+        // foreach ($allCasier as $key => $value) {
+        //     $e = $casierRepository->find($value);
+        //     $e->ifCasierDisponible();
+        // }
 
         return $this->render('centre_relais_colis/casier.html.twig',[
             'centreRelaisColis' => $centreRelaisColis,
             'casiers' => $allCasier
         ]);
+    }
+
+    public function trierCasierParVolumeGrandAPetit(Casier $a, Casier $b)
+    {
+        return $b->getVolume() <=> $a->getVolume();
     }
 }

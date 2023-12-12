@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use Proxies\__CG__\App\Entity\Casier;
 
 #[ORM\Entity(repositoryClass: CentreRelaisColisRepository::class)]
 #[ApiResource(
@@ -143,5 +144,11 @@ class CentreRelaisColis
         $this->ville = $ville;
 
         return $this;
+    }
+
+    
+    public function trierCasierParVolume(Casier $a, Casier $b): ?int
+    {
+        return $b->getVolume() <=> $a->getVolume();
     }
 }

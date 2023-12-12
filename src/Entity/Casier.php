@@ -156,4 +156,15 @@ class Casier
 
         return $this;
     }
+
+    public function ifCasierDisponible(): bool
+    {
+        $lesColis = $this->getLesColis();
+        foreach ($lesColis as $key => $value) {
+            if($value->getEtat() == "arriver"){
+                return false;
+            }
+        }
+        return true;
+    }
 }

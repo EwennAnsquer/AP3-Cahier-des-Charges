@@ -20,6 +20,7 @@
                 <th scope="col">volume</th>
                 <th scope="col">date debut réservation</th>
                 <th scope="col">date fin réservation</th>
+                <th scope="col">disponibilité</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -32,6 +33,13 @@
                     <td>{{c.volume}}</td>
                     <td>{{c.DateDebutReservation|date('Y-m-d H:i:s')}}</td>
                     <td>{{c.DateFinReservation|date('Y-m-d H:i:s')}}</td>
+                    <td>
+                        {% if c.ifCasierDisponible() == false %}
+                            non disponible
+                        {% else %}
+                            disponible
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

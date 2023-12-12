@@ -51,6 +51,26 @@
             <!-- Main content -->
             <div class="main col-12 col-lg-10 pt-2 mw-100">
                 <h1>Notification</h1>
+                {% if notifications is not empty%}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for n in notifications %}
+                                <tr>
+                                    <th scope="row">{{n.date|date('Y-m-d H:i:s')}}</th>
+                                    <td>{{n.titre}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="position-relative text-center top-50 start-50 translate-middle">Il n'y a aucune notifications.</p>
+                {% endif %}
             </div>
         </div>
     </div>

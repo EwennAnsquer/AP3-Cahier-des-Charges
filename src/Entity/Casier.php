@@ -38,9 +38,13 @@ class Casier
     #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'lesCasiers')]
     private Collection $lesCommandes;
 
+    #[ORM\OneToMany(mappedBy: 'casier', targetEntity: Colis::class)]
+    private Collection $lesColis;
+
     public function __construct()
     {
         $this->lesCommandes = new ArrayCollection();
+        $this->lesColis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,6 +122,36 @@ class Casier
     {
         if ($this->lesCommandes->removeElement($lesCommande)) {
             $lesCommande->removeLesCasier($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Colis>
+     */
+    public function getLesColis(): Collection
+    {
+        return $this->lesColis;
+    }
+
+    public function addLesColi(Colis $lesColi): static
+    {
+        if (!$this->lesColis->contains($lesColi)) {
+            $this->lesColis->add($lesColi);
+            $lesColi->setCasier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesColi(Colis $lesColi): static
+    {
+        if ($this->lesColis->removeElement($lesColi)) {
+            // set the owning side to null (unless already changed)
+            if ($lesColi->getCasier() === $this) {
+                $lesColi->setCasier(null);
+            }
         }
 
         return $this;

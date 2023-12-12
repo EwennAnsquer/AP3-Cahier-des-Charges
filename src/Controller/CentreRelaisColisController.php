@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Casier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -143,6 +144,21 @@ class CentreRelaisColisController extends AbstractController
 
         return $this->render('centre_relais_colis/localisation.html.twig',[
             'ville'=>$ville
+        ]);
+    }
+
+    #[Route('/CentreRelaisColis/casier/{id}', name: 'app_centre_relais_colis_casier')]
+    public function casier(CentreRelaisColis $centreRelaisColis, CompteUtilisateurRepository $c): Response
+    {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $allCasier = $centreRelaisColis->getLesCasiers();
+
+        return $this->render('centre_relais_colis/casier.html.twig',[
+            'centreRelaisColis' => $centreRelaisColis,
+            'casiers' => $allCasier
         ]);
     }
 }

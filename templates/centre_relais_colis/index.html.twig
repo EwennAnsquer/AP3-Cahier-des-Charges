@@ -62,6 +62,7 @@
                                 <th scope="col">pays</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,6 +76,9 @@
                                     </td>
                                     <td>{{unCentre.ville.codePostal}}</td>
                                     <td>{{unCentre.ville.lePays.nom}}</td>
+                                    <td>
+                                        <a href="{{path('app_centre_relais_colis_casier', {'id': unCentre.id})}}" type="button" class="btn btn-dark">Casier</a>
+                                    </td>
                                     <td>
                                         <a href="{{path('app_centre_relais_colis_modify', {'id': unCentre.id})}}" type="button" class="btn btn-warning">Éditer</a>
                                     </td>

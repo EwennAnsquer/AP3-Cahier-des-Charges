@@ -32,6 +32,9 @@ class Colis
     #[ORM\ManyToOne(inversedBy: 'lesColis')]
     private ?Commande $laCommande = null;
 
+    #[ORM\ManyToOne(inversedBy: 'lesColis')]
+    private ?Casier $casier = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -81,6 +84,18 @@ class Colis
     public function setLaCommande(?Commande $laCommande): static
     {
         $this->laCommande = $laCommande;
+
+        return $this;
+    }
+
+    public function getCasier(): ?Casier
+    {
+        return $this->casier;
+    }
+
+    public function setCasier(?Casier $casier): static
+    {
+        $this->casier = $casier;
 
         return $this;
     }

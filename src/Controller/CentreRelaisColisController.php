@@ -14,8 +14,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\CompteUtilisateurRepository;
 use App\Entity\Ville;
+use App\Form\CasierType;
 use App\Form\VilleType;
 use App\Repository\CasierRepository;
+use DateTime;
 
 class CentreRelaisColisController extends AbstractController
 {
@@ -149,7 +151,7 @@ class CentreRelaisColisController extends AbstractController
     }
 
     #[Route('/CentreRelaisColis/casier/{id}', name: 'app_centre_relais_colis_casier')]
-    public function casier(CentreRelaisColis $centreRelaisColis, CompteUtilisateurRepository $c, CasierRepository $casierRepository): Response
+    public function casier(CentreRelaisColis $centreRelaisColis, CompteUtilisateurRepository $c): Response
     {
         if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
@@ -160,11 +162,6 @@ class CentreRelaisColisController extends AbstractController
 
         usort($allCasier, [ $this, 'trierCasierParVolumeGrandAPetit' ]);
 
-        // foreach ($allCasier as $key => $value) {
-        //     $e = $casierRepository->find($value);
-        //     $e->ifCasierDisponible();
-        // }
-
         return $this->render('centre_relais_colis/casier.html.twig',[
             'centreRelaisColis' => $centreRelaisColis,
             'casiers' => $allCasier
@@ -174,5 +171,33 @@ class CentreRelaisColisController extends AbstractController
     public function trierCasierParVolumeGrandAPetit(Casier $a, Casier $b)
     {
         return $b->getVolume() <=> $a->getVolume();
+    }
+
+    #[Route('/CentreRelaisColis/Casier/add', name: 'app_centre_relais_colis_casier_add')]
+    public function addCasier(Request $request, EntityManagerInterface $manager, CompteUtilisateurRepository $c, CasierRepository $casierRepository): Response
+    {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $entite = new Casier();
+
+        $form = $this->createForm(CasierType::class, $entite);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entite->setDateDebutReservation(new DateTime());
+            $entite->setDateFinReservation(new DateTime());
+            $manager->persist($entite);
+            $manager->flush();
+
+            $this->addFlash('success', 'Nouvelle ligne ajoutée avec succès.');
+
+            return $this->redirectToRoute('app_centre_relais_colis');
+        }
+
+        return $this->render('centre_relais_colis/addCasier.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

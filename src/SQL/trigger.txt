@@ -1,5 +1,3 @@
-Notification pour état du colis:
-
 DELIMITER //
 
 CREATE TRIGGER changement_etat_colis
@@ -18,3 +16,62 @@ END;
 //
 
 DELIMITER ;
+
+
+
+-------------------------------------------------------
+
+DELIMITER //
+CREATE PROCEDURE VerifierEtNotifierColisNonPris()
+BEGIN
+    DECLARE dateLivraisonLimite DATE;
+    DECLARE dateLivraisonLimite2 DATE;
+    DECLARE datecolis DATE;
+    
+	DECLARE n INT DEFAULT 0;
+	DECLARE i INT DEFAULT 0;
+    
+    SET dateLivraisonLimite = DATE_SUB(NOW(), INTERVAL 5 DAY);
+    SET dateLivraisonLimite2 = DATE_SUB(NOW(), INTERVAL 7 DAY);
+	
+	SELECT COUNT(*) FROM colis INTO n;
+	SET i=0;
+	WHILE i<n DO 
+    	SET datecolis = (SELECT date_debut_reservation 
+                		FROM colis
+                		INNER JOIN commande ON colis.la_commande_id = commande.id
+                		INNER JOIN commande_casier ON commande_casier.commande_id = commande.id
+                		INNER JOIN casier ON commande_casier.casier_id = casier.id
+               		 	WHERE colis.id = n
+                		);
+        IF datecolis > dateLivraisonLimite AND colis.etat = 7 THEN
+            INSERT INTO notification (le_compte_utilisateur_id, le_type_notification_id, titre, date)
+            SELECT commande.le_compte_utilisateur_id, compte_utilisateur.le_type_notification_id, 'Colis non pris depuis 5 jours', NOW()
+            FROM colis
+            INNER JOIN commande ON commande.id = colis.la_commande_id
+            INNER JOIN compte_utilisateur ON compte_utilisateur.id = commande.le_compte_utilisateur_id;
+        ELSEIF datecolis > dateLivraisonLimite2 AND colis.etat = 7 THEN
+            INSERT INTO notification (le_compte_utilisateur_id, le_type_notification_id, titre, date)
+            SELECT commande.le_compte_utilisateur_id, compte_utilisateur.le_type_notification_id, 'Colis non pris depuis 7 jours', NOW()
+            FROM colis
+            INNER JOIN commande ON commande.id = colis.la_commande_id
+            INNER JOIN compte_utilisateur ON compte_utilisateur.id = commande.le_compte_utilisateur_id;
+		END IF;
+  		SET i = i + 1;
+	END WHILE;
+END //
+
+DELIMITER ;
+
+----------------------------------------------
+
+CREATE EVENT check_quotidien_colis
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_TIMESTAMP
+DO call VerifierEtNotifierColisNonPris();
+
+-------------------------------------------
+
+
+TRIGGER.txt
+3 Ko

@@ -46,6 +46,7 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
     public function __construct()
     {
         $this->lesCommandes = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,6 +171,9 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
     #[ORM\JoinColumn(nullable: true)]
     private ?CentreRelaisColis $leCentreRelaisColisDefaut = null;
 
+    #[ORM\OneToMany(mappedBy: 'leCompteUtilisateur', targetEntity: Notification::class)]
+    private Collection $notifications;
+
     public function getVerificationToken(): ?string
     {
         return $this->verificationToken;
@@ -250,6 +254,36 @@ class CompteUtilisateur implements UserInterface, PasswordAuthenticatedUserInter
     public function setLeCentreRelaisColisDefaut(?CentreRelaisColis $leCentreRelaisColisDefaut): static
     {
         $this->leCentreRelaisColisDefaut = $leCentreRelaisColisDefaut;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setLeCompteUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getLeCompteUtilisateur() === $this) {
+                $notification->setLeCompteUtilisateur(null);
+            }
+        }
 
         return $this;
     }

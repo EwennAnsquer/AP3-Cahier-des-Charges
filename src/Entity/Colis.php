@@ -13,9 +13,6 @@ class Colis
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $etat = null;
-
     #[ORM\Column]
     private ?int $Volume = null;
 
@@ -25,21 +22,12 @@ class Colis
     #[ORM\ManyToOne(inversedBy: 'lesColis')]
     private ?Commande $laCommande = null;
 
+    #[ORM\ManyToOne(inversedBy: 'lesColis')]
+    private ?Etat $etat = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEtat(): ?string
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(string $etat): static
-    {
-        $this->etat = $etat;
-
-        return $this;
     }
 
     public function getVolume(): ?int
@@ -74,6 +62,18 @@ class Colis
     public function setLaCommande(?Commande $laCommande): static
     {
         $this->laCommande = $laCommande;
+
+        return $this;
+    }
+
+    public function getEtat(): ?Etat
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?Etat $etat): static
+    {
+        $this->etat = $etat;
 
         return $this;
     }

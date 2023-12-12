@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clients{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('navbar') }}
+{% endblock %}
+
+{% block body %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <td>id</td>
+                <td>volume du colis</td>
+                <td>poids du colis</td>
+                <td>etat du colis</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for colis in commande.lesColis%}
+                <tr>
+                    <td>{{colis.id}}</td>
+                    <td>{{colis.Volume}}</td>
+                    <td>{{colis.poids}}</td>
+                    <td>{{colis.etat}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

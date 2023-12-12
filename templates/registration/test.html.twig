@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('login-register') }}
+{% endblock %}
+    {{form_start(registrationForm)}}
+    {{form_end(registrationForm)}}
+{% endblock %}

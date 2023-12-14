@@ -26,6 +26,7 @@ Encore
     .addEntry('navbar','./assets/navbar.js')
     .addEntry('centreRelaisColis','./assets/centreRelaisColis.js')
     .addEntry('localisation','./assets/localisation.js')
+    .addEntry('commande','./assets/commande.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

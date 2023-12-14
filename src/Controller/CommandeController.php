@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CommandeRepository;
 use PHPMailer\PHPMailer;
-use App\Entity\CompteUtilisateur;
 
 class CommandeController extends AbstractController
 {
@@ -55,9 +54,45 @@ class CommandeController extends AbstractController
 
             if (preg_match('/^\d{10}$/', $data)) { //vérifie si NumeroTelephone contient 10 chiffres
                 $commande->setEtat("en préparation");
+                $commande->setNumeroSuivi($this->generateTrackingNumber());
                 $commande->setLeCompteUtilisateur($user);
                 $e->persist($commande);
                 $e->flush();
+
+                // Créer une nouvelle instance de PHPMailer
+                $mail = new PHPMailer\PHPMailer();
+
+                // Activer le mode de débogage (0 pour désactiver)
+                $mail->SMTPDebug = 0;
+
+                // Définir le type de transport sur SMTP
+                $mail->isSMTP();
+
+                // Hôte du serveur SMTP (MailHog utilise souvent le port 1025)
+                $mail->Host = 'localhost';
+                $mail->Port = 1025;
+
+                // Désactiver l'authentification SMTP (MailHog n'a généralement pas besoin d'authentification)
+                $mail->SMTPAuth = false;
+
+                // Définir l'expéditeur et le destinataire
+                $mail->setFrom('no-reply@ap3-retrait-colis.com', 'AP3 Retrait Colis');
+                $mail->addAddress($c->find($user)->getEmail(), $commande->getNomAcheteur()." ".$commande->getPrenomAcheteur());
+
+                // Définir le sujet du mail
+                $mail->Subject = "Commande reussie";
+
+                // Corps du mail au format HTML
+                $mail->msgHTML('
+                    <p>Merci d\'avoir passé commande.</p>
+                    <p>Votre numéro de suivi de colis est le suivant: '.$commande->getNumeroSuivi().'</p>
+                ');
+
+                // Ajouter une pièce jointe (facultatif)
+                //$mail->addAttachment('chemin/vers/fichier.pdf');
+
+                // Envoyer le mail
+                $mail->send();
 
                 $this->addFlash('success', 'Nouvelle ligne ajoutée avec succès.');
 
@@ -71,6 +106,19 @@ class CommandeController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ]);
+    }
+
+    private function generateTrackingNumber() {
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $length = 13;
+        
+        $randomString = '';
+        
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        
+        return $randomString;
     }
 
     #[Route('/commande/modify/{id}', name: 'app_commande_modify')]

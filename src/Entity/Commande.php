@@ -62,6 +62,9 @@ class Commande
     #[ORM\Column(length: 255)]
     private ?string $NumeroTelephone = null;
 
+    #[ORM\Column(length: 13)]
+    private ?string $numeroSuivi = null;
+
     public function __construct()
     {
         $this->lesColis = new ArrayCollection();
@@ -255,6 +258,18 @@ class Commande
     public function setNumeroTelephone(string $NumeroTelephone): static
     {
         $this->NumeroTelephone = $NumeroTelephone;
+
+        return $this;
+    }
+
+    public function getNumeroSuivi(): ?string
+    {
+        return $this->numeroSuivi;
+    }
+
+    public function setNumeroSuivi(string $numeroSuivi): static
+    {
+        $this->numeroSuivi = $numeroSuivi;
 
         return $this;
     }

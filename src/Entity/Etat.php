@@ -24,7 +24,7 @@ class Etat
     Expédié
     En transit
     En cours de livraison
-    Livré 
+    Livré
     En attente de ramassage
     */
 

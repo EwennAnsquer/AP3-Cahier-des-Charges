@@ -65,10 +65,14 @@ class Commande
     #[ORM\Column(length: 13)]
     private ?string $numeroSuivi = null;
 
+    #[ORM\OneToMany(mappedBy: 'laCommande', targetEntity: LocalisationColis::class)]
+    private Collection $localisationColis;
+
     public function __construct()
     {
         $this->lesColis = new ArrayCollection();
         $this->lesCasiers = new ArrayCollection();
+        $this->localisationColis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -270,6 +274,36 @@ class Commande
     public function setNumeroSuivi(string $numeroSuivi): static
     {
         $this->numeroSuivi = $numeroSuivi;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LocalisationColis>
+     */
+    public function getLocalisationColis(): Collection
+    {
+        return $this->localisationColis;
+    }
+
+    public function addLocalisationColi(LocalisationColis $localisationColi): static
+    {
+        if (!$this->localisationColis->contains($localisationColi)) {
+            $this->localisationColis->add($localisationColi);
+            $localisationColi->setLaCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLocalisationColi(LocalisationColis $localisationColi): static
+    {
+        if ($this->localisationColis->removeElement($localisationColi)) {
+            // set the owning side to null (unless already changed)
+            if ($localisationColi->getLaCommande() === $this) {
+                $localisationColi->setLaCommande(null);
+            }
+        }
 
         return $this;
     }

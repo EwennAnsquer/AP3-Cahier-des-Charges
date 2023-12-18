@@ -76,7 +76,7 @@ class RegistrationController extends AbstractController
             $mail->msgHTML('
                 <p>C\'est la registration.</p>
                 <p>Voici votre code:'.$user->getRegisterNumber().'</p>
-                <p>Puis <a href="'.$urlGenerator->generate('app_registerEmail').'">cliquez-ici</a></p>
+                <p>Puis <a href="http://localhost:8000'.$urlGenerator->generate('app_registerEmail').'">cliquez-ici</a></p>
                 <p>Vous avez 10 minutes pour le valider.</p>
             ');
 

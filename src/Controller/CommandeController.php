@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Colis;
 use App\Entity\Commande;
+use App\Entity\LocalisationColis;
 use App\Form\ColisModifyType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,8 @@ use App\Form\CommandeAddType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CommandeRepository;
+use App\Repository\LocalisationRepository;
+use DateTime;
 use PHPMailer\PHPMailer;
 
 class CommandeController extends AbstractController
@@ -35,7 +38,7 @@ class CommandeController extends AbstractController
     }
 
     #[Route('/commande/add', name: 'app_commande_add')]
-    public function add(Request $request, CompteUtilisateurRepository $c, EntityManagerInterface $e): Response
+    public function add(Request $request, CompteUtilisateurRepository $c, EntityManagerInterface $e, LocalisationRepository $localisationRepository): Response
     {
         if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
@@ -53,6 +56,12 @@ class CommandeController extends AbstractController
             $data = $form->get('NumeroTelephone')->getData();
 
             if (preg_match('/^\d{10}$/', $data)) { //vérifie si NumeroTelephone contient 10 chiffres
+                $localisationColis = new LocalisationColis();
+                $localisationColis->setLaCommande($commande);
+                $localisationColis->setLaLocalisation($localisationRepository->findBy(['nom'=>"entrepôt"])[0]);
+                $localisationColis->setDate(new DateTime());
+                $e->persist($localisationColis);
+
                 $commande->setEtat("en préparation");
                 $commande->setNumeroSuivi($this->generateTrackingNumber());
                 $commande->setLeCompteUtilisateur($user);
@@ -282,5 +291,21 @@ class CommandeController extends AbstractController
 
         // Redirigez vers la page d'où provient la requête
         return $this->redirect($request->headers->get('referer'));
+    }
+
+    #[Route('/commande/colis/localisation/{id}', name: 'app_commande_colis_localisation')]
+    public function commandeColisLocalisation(Colis $entite, CompteUtilisateurRepository $c): Response
+    {
+        if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if (!$entite) {
+            throw $this->createNotFoundException('Entité non trouvée');
+        }
+        
+        return $this->render('commande/colisLocalisation.html.twig',[
+            'colis'=>$entite
+        ]);
     }
 }

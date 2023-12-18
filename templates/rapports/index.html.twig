@@ -50,7 +50,27 @@
             </div>
             <!-- Main content -->
             <div class="main col-12 col-lg-10 pt-2 mw-100">
-                
+                <h1>Colis</h1>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">en préparation</th>
+                                <th scope="col">Prêt à expédier</th>
+                                <th scope="col">Expédié</th>
+                                <th scope="col">En transit</th>
+                                <th scope="col">En cours de livraison</th>
+                                <th scope="col">Livré</th>
+                                <th scope="col">En attente de ramassage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr>
+                                    {% for c in colisEtat %}
+                                        <th>{{c}}</th>
+                                    {% endfor %}
+                                </tr>
+                        </tbody>
+                    </table>
             </div>
         </div>
     </div>

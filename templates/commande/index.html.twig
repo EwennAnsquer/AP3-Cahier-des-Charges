@@ -5,6 +5,7 @@
 {% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
     {{ encore_entry_link_tags('navbar') }}
+    {{ encore_entry_link_tags('commande') }}
 {% endblock %}
 
 {% block body %}
@@ -82,7 +83,9 @@
                                     <td>{{c.Volume}}</td>
                                     <td>{{c.poids}}</td>
                                     <td>{{c.etat}}</td>
-                                    <td>{{c.numeroSuivi}}</td>
+                                    <td>
+                                        <a href="{{path('app_commande_colis_localisation', {'id': c.id})}}" type="button" class="btn btn-dark">{{c.numeroSuivi}}</a>
+                                    </td>
                                     <td>{{c.laVille.nom}}</td>
                                     <td>{{c.laVille.lePays.nom}}</td>
                                     <td>

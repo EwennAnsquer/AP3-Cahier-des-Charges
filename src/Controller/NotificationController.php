@@ -19,7 +19,7 @@ class NotificationController extends AbstractController
             $user = $this->getUser();
         }
 
-        if ($c->find($this->getUser())->getLeTypeNotification()->getNom() != "email") {
+        if ($c->find($this->getUser())->getLeTypeNotification()->getNom() != "application") {
             return $this->redirectToRoute('app_rapports');
         }
 

@@ -38,9 +38,6 @@ class Commande
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $DateLivraison = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $etat = null;
-
     #[ORM\OneToMany(mappedBy: 'laCommande', targetEntity: Colis::class)]
     private Collection $lesColis;
 
@@ -67,6 +64,9 @@ class Commande
 
     #[ORM\OneToMany(mappedBy: 'laCommande', targetEntity: LocalisationColis::class)]
     private Collection $localisationColis;
+
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    private ?Etat $etat = null;
 
     public function __construct()
     {
@@ -136,18 +136,6 @@ class Commande
     public function setDateLivraison(\DateTimeInterface $DateLivraison): static
     {
         $this->DateLivraison = $DateLivraison;
-
-        return $this;
-    }
-
-    public function getEtat(): ?string
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(string $etat): static
-    {
-        $this->etat = $etat;
 
         return $this;
     }
@@ -304,6 +292,18 @@ class Commande
                 $localisationColi->setLaCommande(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEtat(): ?Etat
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?Etat $etat): static
+    {
+        $this->etat = $etat;
 
         return $this;
     }

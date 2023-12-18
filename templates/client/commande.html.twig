@@ -9,6 +9,8 @@
 
 {% block body %}
 
+    <a href="{{path("app_client")}}" class="btn btn-dark">retour</a>
+
     {{compteUtilisateur.email}}
 
     <table class="table">
@@ -31,21 +33,21 @@
             {% for commande in compteUtilisateur.lesCommandes%}
                 <tr>
                     <td>{{commande.id}}</td>
-                    <td>{{commande.Pays}}</td>
+                    <td>{{commande.lePays.Nom}}</td>
                     <td>{{commande.PrenomAcheteur}}</td>
                     <td>{{commande.NomAcheteur}}</td>
-                    <td>{{commande.CodePostal}}</td>
-                    <td>{{commande.Ville}}</td>
+                    <td>{{commande.laVille.codePostal}}</td>
+                    <td>{{commande.laVille.nom}}</td>
                     <td>{{commande.NumeroTelephone}}</td>
                     <td>{{commande.Volume}}</td>
                     <td>{{commande.poids}}</td>
                     <td>{{commande.DateLivraison|date('d-m-Y H:i:s')}}</td>
-                    <td>{{commande.etat}}</td>
+                    <td>{{commande.etat.nom}}</td>
                     <td>
                         {% if commande.lesColis is empty %}
                             pas de colis
                         {% else %}
-                            <a href="{{path("app_client_colis",{id:commande.id})}}" class="btn btn-primary">Colis</a>
+                            <a href="{{path("app_client_colis",{id:commande.id})}}" class="btn btn-dark">Colis</a>
                         {% endif %}
                     </td>
                 </tr>

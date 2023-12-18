@@ -14,6 +14,7 @@ use App\Form\CommandeAddType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CommandeRepository;
+use App\Repository\EtatRepository;
 use App\Repository\LocalisationRepository;
 use DateTime;
 use PHPMailer\PHPMailer;
@@ -38,7 +39,7 @@ class CommandeController extends AbstractController
     }
 
     #[Route('/commande/add', name: 'app_commande_add')]
-    public function add(Request $request, CompteUtilisateurRepository $c, EntityManagerInterface $e, LocalisationRepository $localisationRepository): Response
+    public function add(Request $request, CompteUtilisateurRepository $c, EntityManagerInterface $e, LocalisationRepository $localisationRepository, EtatRepository $etatRepository): Response
     {
         if ($this->getUser()==false or $c->find($this->getUser())->isIsRegister()==false) {
             return $this->redirectToRoute('app_login');
@@ -62,7 +63,7 @@ class CommandeController extends AbstractController
                 $localisationColis->setDate(new DateTime());
                 $e->persist($localisationColis);
 
-                $commande->setEtat("en préparation");
+                $commande->setEtat($etatRepository->findBy(['nom'=>"en préparation"])[0]);
                 $commande->setNumeroSuivi($this->generateTrackingNumber());
                 $commande->setLeCompteUtilisateur($user);
                 $e->persist($commande);

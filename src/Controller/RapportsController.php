@@ -32,9 +32,8 @@ class RapportsController extends AbstractController
                     $colisEtat[$i-1]+=1;
                 }
             }
+            $this->envoiMailSiColisPasRecup($user, $c, $co); //le user actuel, le CompteUtilisateurRepository et le colis actuel
         }
-
-        $this->envoiMailSiColisPasRecup($colisRepository, $user, $c);
 
         return $this->render('rapports/index.html.twig', [
             'user' => $user,
@@ -48,45 +47,40 @@ class RapportsController extends AbstractController
          return $this->redirectToRoute('app_rapports');
     }
 
-    private function envoiMailSiColisPasRecup($c, $user, $compteUtilisateurRepository){
+    private function envoiMailSiColisPasRecup($user, $compteUtilisateurRepository, $colis){
         $actualDate = new DateTime();
-        foreach ($c->findAll() as $key => $value) {
-            if($c->find($value)){
-                $colis = $c->find($value);
-                if($colis->getEtat()->getNom() === "Livré" && $colis->getCasier()->getDateDebutReservation()->modify("+5 days")->format('Y-m-d') == $actualDate->format("Y-m-d") || $colis->getCasier()->getDateDebutReservation()->modify("+2 days")->format('Y-m-d') == $actualDate->format("Y-m-d")){
-                    // Créer une nouvelle instance de PHPMailer
-                    $mail = new PHPMailer\PHPMailer();
+        if($colis->getEtat()->getNom() == "Livré" && ($colis->getCasier()->getDateDebutReservation()->modify("+5 days")->format('Y-m-d') == $actualDate->format("Y-m-d") || $colis->getCasier()->getDateDebutReservation()->modify("+2 days")->format('Y-m-d') == $actualDate->format("Y-m-d")) ){
+            // Créer une nouvelle instance de PHPMailer
+            $mail = new PHPMailer\PHPMailer();
 
-                    // Activer le mode de débogage (0 pour désactiver)
-                    $mail->SMTPDebug = 0;
+            // Activer le mode de débogage (0 pour désactiver)
+            $mail->SMTPDebug = 0;
 
-                    // Définir le type de transport sur SMTP
-                    $mail->isSMTP();
+            // Définir le type de transport sur SMTP
+            $mail->isSMTP();
 
-                    // Hôte du serveur SMTP (MailHog utilise souvent le port 1025)
-                    $mail->Host = 'localhost';
-                    $mail->Port = 1025;
+            // Hôte du serveur SMTP (MailHog utilise souvent le port 1025)
+            $mail->Host = 'localhost';
+            $mail->Port = 1025;
 
-                    // Désactiver l'authentification SMTP (MailHog n'a généralement pas besoin d'authentification)
-                    $mail->SMTPAuth = false;
+            // Désactiver l'authentification SMTP (MailHog n'a généralement pas besoin d'authentification)
+            $mail->SMTPAuth = false;
 
-                    // Définir l'expéditeur et le destinataire
-                    $mail->setFrom('no-reply@ap3-retrait-colis.com', 'AP3 Retrait Colis');
+            // Définir l'expéditeur et le destinataire
+            $mail->setFrom('no-reply@ap3-retrait-colis.com', 'AP3 Retrait Colis');
 
-                    $mail->addAddress($compteUtilisateurRepository->find($user)->getEmail());
+            $mail->addAddress($compteUtilisateurRepository->find($user)->getEmail());
 
-                    // Définir le sujet du mail
-                    $mail->Subject = 'Notification Ramassage Colis';
+            // Définir le sujet du mail
+            $mail->Subject = 'Notification Ramassage Colis';
 
-                    // Corps du mail au format HTML
-                    $mail->msgHTML('
-                        <p>C\'est la notification.</p>
-                        <p>Votre colis est disponible dans son casier à l\'adresse '.$value->getCasier()->getLeCentreRelaisColis()->getAdresse().'. Il faudrait venir le chercher.</p>
-                    ');
+            // Corps du mail au format HTML
+            $mail->msgHTML('
+                <p>C\'est la notification.</p>
+                <p>Votre colis est disponible dans son casier à l\'adresse '.$colis->getCasier()->getLeCentreRelaisColis()->getAdresse().'. Il faudrait venir le chercher.</p>
+            ');
 
-                    $mail->send();
-                }
-            }
+            $mail->send();
         }
     }
 }

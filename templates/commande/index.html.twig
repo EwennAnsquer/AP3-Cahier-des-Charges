@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commandes{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('navbar') }}
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid p-0 m-0 w-100">
+        <div class="row firstRow w-100 ps-5 pe-5">
+            <div class="d-flex flex-row align-items-center justify-content-end gap-4">
+                <!-- Button to toggle the navbar collapse -->
+                <button class="navbar-toggler me-auto d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list fs-1"></i>
+                </button>
+                <a href="{{ path('app_notification') }}">
+                    <img class="notificationBell" src="{{ asset('img/Bell.png') }}" alt="notification button">
+                </a>
+                <div class="profile rounded-circle d-flex justify-content-center align-items-center">
+                    {{user.email|slice(0, 1)|upper}}
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Navbar for smaller screens -->
+        <div class="d-lg-none">
+            <div class="collapse mobileRow" id="navbarCollapse">
+                <div class="leftNavBar d-flex flex-column align-items-center text-center p-4 gap-4 pb-5">
+                    <a href="{{ path('app_rapports') }}" class="text-decoration-none fs-5">Rapports</a>
+                    <a href="{{ path('app_commande') }}" class="text-decoration-none fs-5"><u>Commandes</u></a>
+                    <a href="{{ path('app_centre_relais_colis') }}" class="text-decoration-none fs-5">Centre de Relais Colis</a>
+                    <a href="{{ path('app_client') }}" class="text-decoration-none fs-5">Clients</a>
+                    <a href="{{ path('app_parametre') }}" class="text-decoration-none fs-5">Paramètres</a>
+                    <a href="{{ path('app_logout') }}" class="text-decoration-none logoutButton fs-5">Déconnexion</u></a>
+                </div>
+            </div>
+        </div>
+        <div class="row secondRow w-100">
+            <!-- Left Navbar for larger screens -->
+            <div class="col-lg-2 leftNavBar d-none d-lg-flex flex-column align-items-center text-center p-4 gap-4">
+                <a href="{{ path('app_rapports') }}" class="text-decoration-none fs-5">Rapports</a>
+                <a href="{{ path('app_commande') }}" class="text-decoration-none fs-5"><u>Commandes</u></a>
+                <a href="{{ path('app_centre_relais_colis') }}" class="text-decoration-none fs-5">Centre de Relais Colis</a>
+                <a href="{{ path('app_client') }}" class="text-decoration-none fs-5">Clients</a>
+                <a href="{{ path('app_parametre') }}" class="text-decoration-none fs-5">Paramètres</a>
+                <a href="{{ path('app_logout') }}" class="text-decoration-none logoutButton fs-5">Déconnexion</u></a>
+            </div>
+            <!-- Main content -->
+            <div class="main col-12 col-lg-10 pt-2 mw-100">
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}

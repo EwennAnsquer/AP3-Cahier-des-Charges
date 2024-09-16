@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Centre Relais Colis{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+    add
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Centre Relais Colis{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+
+<a href="{{path('app_centre_relais_colis')}}" type="button" class="btn btn-dark">Retour</a>
+
+{{centreRelaisColis.nom}}
+
+{% if casiers is not empty%}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">volume</th>
+                <th scope="col">date debut réservation</th>
+                <th scope="col">date fin réservation</th>
+                <th scope="col">disponibilité</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in casiers %}
+                <tr>
+                    <th scope="row">{{c.id}}</th>
+                    <td>{{c.volume}}</td>
+                    <td>{{c.DateDebutReservation|date('Y-m-d H:i:s')}}</td>
+                    <td>{{c.DateFinReservation|date('Y-m-d H:i:s')}}</td>
+                    <td>
+                        {% if c.ifCasierDisponible() == false %}
+                            non disponible
+                        {% else %}
+                            disponible
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="position-relative text-center top-50 start-50 translate-middle">Il n'y a aucun casier dans ce centre de relais colis.</p>
+{% endif %}
+    
+{% endblock %}

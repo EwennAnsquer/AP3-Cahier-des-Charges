@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clients{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('navbar') }}
+{% endblock %}
+
+{% block body %}
+
+    <a href="{{path("app_client")}}" class="btn btn-dark">retour</a>
+
+    {{compteUtilisateur.email}}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <td>id</td>
+                <td>pays</td>
+                <td>prenom</td>
+                <td>nom</td>
+                <td>code postal</td>
+                <td>ville</td>
+                <td>numéro de téléphone</td>
+                <td>volume de la commande</td>
+                <td>poids de la commande</td>
+                <td>date de livraison</td>
+                <td>etat de la commande</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in compteUtilisateur.lesCommandes%}
+                <tr>
+                    <td>{{commande.id}}</td>
+                    <td>{{commande.lePays.Nom}}</td>
+                    <td>{{commande.PrenomAcheteur}}</td>
+                    <td>{{commande.NomAcheteur}}</td>
+                    <td>{{commande.laVille.codePostal}}</td>
+                    <td>{{commande.laVille.nom}}</td>
+                    <td>{{commande.NumeroTelephone}}</td>
+                    <td>{{commande.Volume}}</td>
+                    <td>{{commande.poids}}</td>
+                    <td>{{commande.DateLivraison|date('d-m-Y H:i:s')}}</td>
+                    <td>{{commande.etat.nom}}</td>
+                    <td>
+                        {% if commande.lesColis is empty %}
+                            pas de colis
+                        {% else %}
+                            <a href="{{path("app_client_colis",{id:commande.id})}}" class="btn btn-dark">Colis</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

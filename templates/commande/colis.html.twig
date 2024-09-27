@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Centre Relais Colis{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+
+<a href="{{path('app_commande')}}" type="button" class="btn btn-dark">Retour</a>
+
+{% if colis is not empty%}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">volume</th>
+                <th scope="col">poids</th>
+                <th scope="col">etat</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in colis %}
+                <tr>
+                    <th scope="row">{{c.id}}</th>
+                    <td>{{c.Volume}}</td>
+                    <td>{{c.Poids}}</td>
+                    <td>{{c.etat.nom}}</td>
+                    <td>
+                        <a href="{{path('app_commande_colis_modify', {'id': c.id})}}" type="button" class="btn btn-warning">Éditer</a>
+                    </td>
+                    <td>
+                        <a href="{{path('app_commande_colis_delete', {'id': c.id})}}" type="button" class="btn btn-danger">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="position-relative text-center top-50 start-50 translate-middle">Il n'y a aucun colis dans cette commande.</p>
+{% endif %}
+    
+{% endblock %}

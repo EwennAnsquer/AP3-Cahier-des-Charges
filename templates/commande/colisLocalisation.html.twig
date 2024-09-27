@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Colis{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('localisation') }}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block body %}
+
+<a href="{{path('app_commande')}}" type="button" class="btn btn-dark">Retour</a>
+
+<p>Votre Colis est dans dans l'état: {{colis.etat.nom}}</p>
+<p>Votre numéro de suivit de commande est le suivant: {{colis.laCommande.numeroSuivi}}</p>
+<p>Votre Colis info colis:</p>
+{% if colis.laCommande.localisationColis is not empty%}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">localisation</th>
+            <th scope="col">date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for l in colis.laCommande.localisationColis %}
+            <tr>
+                <th scope="row">{{l.laLocalisation.nom}}</th>
+                <td>{{l.date|date("Y-m-d")}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="position-relative text-center top-50 start-50 translate-middle">Il n'y a aucun changement de lieu pour la commande.</p>
+{% endif %}
+    
+{% endblock %}
